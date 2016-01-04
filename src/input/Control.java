@@ -51,7 +51,6 @@ public class Control {
 	
 	public Control() {
 		controller = new JInputJoystick(Controller.Type.GAMEPAD);
-		System.out.println(controller.pollController());
 		try {
 			r = new Robot();
 		} catch (AWTException e1) {
