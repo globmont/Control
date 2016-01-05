@@ -258,7 +258,9 @@ public class DefaultButtonHandler implements ButtonHandler {
 				r.keyPress(KeyEvent.VK_SHIFT);
 			}
 
-			Integer[] codes = Utils.keyCodes.get(c);
+			Integer[] codes = Utils.keyCodes.get(Character.toLowerCase(c));
+//			System.out.println(Character.toLowerCase(c));
+//			System.out.println(Arrays.toString(codes));
 			pressKeySequence(codes);
 
 			if (Character.isUpperCase(c)) {
@@ -388,7 +390,6 @@ public class DefaultButtonHandler implements ButtonHandler {
 			if(lbPressed) {
 				Platform.runLater(() -> {
 					String letter = keyboard.getLetter();
-					System.out.println(letter);
 					writeString(letter);
 				});
 			} else {

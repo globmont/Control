@@ -4,16 +4,16 @@ import com.sun.webkit.WebPage;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.w3c.dom.Document;
 
+import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
 
@@ -24,26 +24,26 @@ public class Input extends Application implements Runnable {
 	private static Stage subStage;
 	private BorderPane rootLayout;
 	private static WebEngine webengine;
+	private static JFrame window;
 
 
 	@Override
 	public void start(Stage primaryStage) {
-		this.primaryStage = primaryStage;
+		/*this.primaryStage = primaryStage;
 		this.primaryStage.initStyle(StageStyle.UTILITY);
 		this.primaryStage.setMaxHeight(0);
 		this.primaryStage.setMaxWidth(0);
 		this.primaryStage.setX(Double.MAX_VALUE);
-
+*/
 		
 		initRootLayout();
 	}
 	
 	public void initRootLayout() {
 		try {
-			primaryStage.show();
-			
+//			primaryStage.show();
+
 			rootLayout = (BorderPane) FXMLLoader.load(getClass().getResource("Layout.fxml"));
-			
 			Scene scene = new Scene(rootLayout,630,150);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("flatterfx.css").toExternalForm());
@@ -56,15 +56,36 @@ public class Input extends Application implements Runnable {
 			String url = getClass().getResource("/html/index.html").toExternalForm();
 			web.getEngine().load(url);
 
+//			JSObject dimObj = (JSObject) webengine.executeScript("getDimensions()");
+//			int width = (Integer) dimObj.getMember("width");
+//			int height = (Integer) dimObj.getMember("height");
 
-			this.subStage = new Stage();
+			int width = 630;
+			int height = 150;
+
+			window = new JFrame();
+			window.setAutoRequestFocus(false);
+			window.setAlwaysOnTop(true);
+//			window.setFocusable(false);
+//			window.setFocusableWindowState(false);
+			window.setType(JFrame.Type.UTILITY);
+			window.setUndecorated(true);
+			window.setSize(width, height);
+			final JFXPanel panel = new JFXPanel();
+//			panel.setSize(630, 150);
+			panel.setScene(scene);
+			window.add(panel);
+//			window.setVisible(true);
+//			System.out.println("Window showing: " + window.isShowing());
+
+			/*this.subStage = new Stage();
 			subStage.initStyle(StageStyle.TRANSPARENT);
 			subStage.initModality(Modality.APPLICATION_MODAL);
 			subStage.setTitle("SubStage");
 			subStage.initOwner(this.primaryStage);
 			subStage.setScene(scene);
 			subStage.show();
-			hide();
+			hide();*/
 
 			
 		} catch(Exception e) {
@@ -102,7 +123,8 @@ public class Input extends Application implements Runnable {
 		/*System.out.println("Hide Substage: " + subStage);
 		System.out.println("Hide Primary Stage: " + primaryStage);
 		System.out.println("Hide Platform FX Thread: " + Platform.isFxApplicationThread());*/
-		subStage.hide();
+//		subStage.hide();
+		window.setVisible(false);
 
 	}
 
@@ -111,12 +133,15 @@ public class Input extends Application implements Runnable {
 		System.out.println("Show Primary Stage: " + primaryStage);
 		System.out.println("Show Platform FX Thread: " + Platform.isFxApplicationThread());*/
 		updateLocation();
-		subStage.show();
+//		subStage.show();
+		window.setVisible(true);
 	}
 
 	public void updateLocation() {
-		subStage.setX(MouseInfo.getPointerInfo().getLocation().getX());
-		subStage.setY(MouseInfo.getPointerInfo().getLocation().getY());
+//		subStage.setX(MouseInfo.getPointerInfo().getLocation().getX());
+//		subStage.setY(MouseInfo.getPointerInfo().getLocation().getY());
+		window.setLocation((int) Math.round(MouseInfo.getPointerInfo().getLocation().getX()),
+						   (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()));
 	}
 
 	class DocListener implements ChangeListener<Document>{

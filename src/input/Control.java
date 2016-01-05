@@ -1,11 +1,10 @@
 package input;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.util.ArrayList;
-
 import joystick.JInputJoystick;
 import net.java.games.input.Controller;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class Control {
 	JInputJoystick controller;
@@ -82,6 +81,7 @@ public class Control {
 	}
 	
 	private void run() {
+
 		while(true) {
 			if(!controller.pollController()) {
 				System.err.println("Couldn't reach controller! Exiting.");

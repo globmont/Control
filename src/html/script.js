@@ -71,4 +71,11 @@ function setShift(value) {
 	init();
 }
 
+function getDimensions() {
+	width = parseInt($("#mainContainer").css("width").substring(0, 3));
+	height = parseInt($("#mainContainer").css("height").substring(0, 3));
+
+	return {height: height, width: width};
+}
+
 init();
