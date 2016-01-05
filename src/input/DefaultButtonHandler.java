@@ -1,5 +1,7 @@
 package input;
 
+import application.Input;
+
 import java.awt.MouseInfo;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -32,10 +34,14 @@ public class DefaultButtonHandler implements ButtonHandler {
 	int[] dpadWhitespaceCodes = {KeyEvent.VK_BACK_SPACE, KeyEvent.VK_ENTER, KeyEvent.VK_SPACE, KeyEvent.VK_TAB};
 	int[] dpadArrowCodes = {KeyEvent.VK_UP, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT};
 	boolean numLockWasOn = false;
-	
-	public DefaultButtonHandler(Control c) {
+
+	private Input keyboard;
+	private Runnable thread;
+
+	public DefaultButtonHandler(Control c, Input keyboard) {
 		this.control = c;
 		this.r = c.r;
+		this.keyboard = keyboard;
 	}
 
 	@Override
@@ -76,8 +82,11 @@ public class DefaultButtonHandler implements ButtonHandler {
 
 	@Override
 	public void lb(boolean down) {
-		// TODO Auto-generated method stub
-		
+		if(down) {
+			lbDown();
+		} else {
+			lbUp();
+		}
 	}
 
 	@Override
@@ -190,8 +199,10 @@ public class DefaultButtonHandler implements ButtonHandler {
 
 	
 	public void lbDown() {
-		// TODO Auto-generated method stub
-		
+		if(!lbPressed) {
+			keyboard.show();
+			lbPressed = true;
+		}
 	}
 
 	
@@ -274,7 +285,10 @@ public class DefaultButtonHandler implements ButtonHandler {
 
 	
 	public void lbUp() {
-		// TODO Auto-generated method stub
+		if(lbPressed) {
+			keyboard.hide();
+			lbPressed = false;
+		}
 		
 	}
 
@@ -369,9 +383,13 @@ public class DefaultButtonHandler implements ButtonHandler {
 	@Override
 	public void lsMove(double x, double y) {
 		lsPolls++;
-		if(!lsMoving || (lsMoving && lsPolls % 20 == 0)) {
-			r.mouseWheel((int) (y * scrollScale));
-			lsMoving = true;
+		if(!lbPressed) { //scroll
+			if (!lsMoving || (lsMoving && lsPolls % 20 == 0)) {
+				r.mouseWheel((int) (y * scrollScale));
+				lsMoving = true;
+			}
+		} else { //keyboard
+
 		}
 		
 	}

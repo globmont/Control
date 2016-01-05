@@ -1,4 +1,4 @@
-package joystick;
+package jinputjoysticktestv2;
 
 import net.java.games.input.Component;
 import net.java.games.input.Controller;

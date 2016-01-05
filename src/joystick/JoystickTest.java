@@ -5,293 +5,201 @@ import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JToggleButton;
-
 import net.java.games.input.Component;
+import net.java.games.input.Component.Identifier;
 import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
 
 /**
  *
  * Joystick Test with JInput
- * 
- * 
- * @author TheUzo007
+ *
+ *
+ * @author TheUzo007 
  *         http://theuzo007.wordpress.com
- * 
- * 
- * Test for joysticks of stick or gamepad type (JInput type), 
- * like Logitech Dual Action which is a stick type or
- * Xbox MadCatz which is a gamepad type.
- * 
+ *
+ * Created 22 Oct 2013
+ *
  */
-
 public class JoystickTest {
     
     public static void main(String args[]) {
-        final JFrameWindow window = new JFrameWindow();
-        
-        /*
-        JInputJoystickTest jinputJoystickTest = new JInputJoystickTest();
+        //JInputJoystickTest jinputJoystickTest = new JInputJoystickTest();
         // Writes (into console) informations of all controllers that are found.
-        jinputJoystickTest.getAllControllersInfo();
+        //jinputJoystickTest.getAllControllersInfo();
         // In loop writes (into console) all joystick components and its current values.
-        jinputJoystickTest.pollControllerAndItsComponents(Controller.Type.STICK);
+        //jinputJoystickTest.pollControllerAndItsComponents(Controller.Type.STICK);
         //jinputJoystickTest.pollControllerAndItsComponents(Controller.Type.GAMEPAD);
-        */
         
-        
-        // Test for joystick of stick or gamepad type.
-        //stickOrGamepadTypeJoystick_Test(window);
-        stickOrGamepadTypeJoystick_Test_Better(window);
-        
-        // Test for joystick of stick type.
-        //stickTypeJoystick_Test(window);
+        new JoystickTest();
     }
     
     
-    
-    
-    /*
-     * Test for stick and gamepad type of joystick.
-     * The same as stickOrGamepadTypeJoystick_Test but better/easier/cleaner for right controller joystick.
-     */
-    private static void stickOrGamepadTypeJoystick_Test_Better(JFrameWindow window)
-    {
-        // Creates controller
-        JInputJoystick joystick = new JInputJoystick(Controller.Type.STICK, Controller.Type.GAMEPAD);
+    final JFrameWindow window;
+    private ArrayList<Controller> foundControllers;
+
+    public JoystickTest() {
+        window = new JFrameWindow();
         
-        // Checks if the controller was found.
-        if( !joystick.isControllerConnected() ){
-            window.setControllerName("No controller found!");
-            return;
-        }
+        foundControllers = new ArrayList<>();
+        searchForControllers();
         
-        // Sets controller name.
-        window.setControllerName(joystick.getControllerName());
-        
-        // If gamepad, change name for axis.
-        if(joystick.getControllerType() == Controller.Type.GAMEPAD)
-        {
-            window.setProgressBar1Name("X Rotation");
-            window.setProgressBar2Name("Y Rotation");
-        }
-        // Stick type
+        // If at least one controller was found we start showing controller data on window.
+        if(!foundControllers.isEmpty())
+            startShowingControllerData();
         else
-        {
-            window.setProgressBar3Name("");
-            window.hideProgresBar3();
-        }
-        
-        while(true)
-        {
-            // Gets current state of joystick! And checks, if joystick is disconnected, break while loop.
-            if( !joystick.pollController() ) {
-                window.setControllerName("Controller disconnected!");
-                break;
-            }
-            
-            // Left controller joystick
-            int xValuePercentageLeftJoystick = joystick.getX_LeftJoystick_Percentage();
-            int yValuePercentageLeftJoystick = joystick.getY_LeftJoystick_Percentage();
-            window.setXYAxis(xValuePercentageLeftJoystick, yValuePercentageLeftJoystick);
-            
-            // Right controller joystick
-            int xValuePercentageRightJoystick = joystick.getX_RightJoystick_Percentage();
-            int yValuePercentageRightJoystick = joystick.getY_RightJoystick_Percentage();
-            window.setZAxis(xValuePercentageRightJoystick);
-            window.setZRotation(yValuePercentageRightJoystick);
-            
-            // If controller is a gamepad type. 
-            if(joystick.getControllerType() == Controller.Type.GAMEPAD)
-            { // Must check if controller is a gamepad, because stick type controller also have Z axis but it's for right controller joystick.
-                // If Z Axis exists.
-                if(joystick.componentExists(Component.Identifier.Axis.Z)){
-                    int zAxisValuePercentage = joystick.getZAxisPercentage();
-                    window.setZAxisGamepad(zAxisValuePercentage);
-                }
-            }
-            
-            // Sets controller buttons
-            JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
-            buttonsPanel.setBounds(6, 19, 246, 110);
-            ArrayList<Boolean> buttonsValues = joystick.getButtonsValues();
-            for(int i=0; i < buttonsValues.size(); i++) {
-                JToggleButton aToggleButton = new JToggleButton(""+(i+1), buttonsValues.get(i));
-                aToggleButton.setPreferredSize(new Dimension(48, 25));
-                aToggleButton.setEnabled(false);
-                buttonsPanel.add(aToggleButton);
-            }
-            window.setControllerButtons(buttonsPanel);
-            
-            // Hat Switch
-            float hatSwitchPosition = joystick.getHatSwitchPosition();
-            window.setHatSwitch(hatSwitchPosition);
-            
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(JoystickTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+            window.addControllerName("No controller found!");
     }
-    
-    
-    
-    
-    /*
-     * Test for stick and gamepad type of joystick.
+
+    /**
+     * Search (and save) for controllers of type Controller.Type.STICK,
+     * Controller.Type.GAMEPAD, Controller.Type.WHEEL and Controller.Type.FINGERSTICK.
      */
-    private static void stickOrGamepadTypeJoystick_Test(JFrameWindow window)
-    {
-        // Creates controller
-        JInputJoystick joystick = new JInputJoystick(Controller.Type.STICK, Controller.Type.GAMEPAD);
-        
-        // Checks if the controller was found.
-        if( !joystick.isControllerConnected() ){
-            window.setControllerName("No controller found!");
-            return;
-        }
-        
-        // Sets controller name.
-        window.setControllerName(joystick.getControllerName());
-        
-        // Set axis names and progress bar visibility on the frame/window of the program.
-        if(joystick.getControllerType() == Controller.Type.GAMEPAD)
-        {
-            // Gamepad
-            window.setProgressBar1Name("X Rotation");
-            window.setProgressBar2Name("Y Rotation");
-        } else {
-            // Stick
-            window.setProgressBar3Name("");
-            window.hideProgresBar3();
-        }
-        
-        while(true)
-        {
-            // Gets current state of joystick! And checks, if joystick is disconnected, break while loop.
-            if( !joystick.pollController() ) {
-                window.setControllerName("Controller disconnected!");
-                break;
-            }
+    private void searchForControllers() {
+        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+
+        for(int i = 0; i < controllers.length; i++){
+            Controller controller = controllers[i];
             
-            // x axis & y axis (left joystick on controller)
-            int xAxisValuePercentage = joystick.getXAxisPercentage();
-            int yAxisValuePercentage = joystick.getYAxisPercentage();
-            window.setXYAxis(xAxisValuePercentage, yAxisValuePercentage);
-            
-            // stick type controller
-            if(joystick.getControllerType() == Controller.Type.STICK)
+            if (
+                    controller.getType() == Controller.Type.STICK || 
+                    controller.getType() == Controller.Type.GAMEPAD || 
+                    controller.getType() == Controller.Type.WHEEL ||
+                    controller.getType() == Controller.Type.FINGERSTICK
+               )
             {
-                // z axis & z rotation (right joystick on controller)
-                int zAxisValuePercentage = joystick.getZAxisPercentage();
-                window.setZAxis(zAxisValuePercentage);
-                int zRotationValuePercentage = joystick.getZRotationPercentage();
-                window.setZRotation(zRotationValuePercentage);
-            }
-            // gamepad type controller
-            else
-            {
-                // x rotation & y rotation (right joystick on controller)
-                int xRotationValuePercentage = joystick.getXRotationPercentage();
-                window.setZAxis(xRotationValuePercentage);
-                int yRotationValuePercentage = joystick.getYRotationPercentage();
-                window.setZRotation(yRotationValuePercentage);
+                // Add new controller to the list of all controllers.
+                foundControllers.add(controller);
                 
-                // Checks if z axis exists.
-                if(joystick.componentExists(Component.Identifier.Axis.Z)){
-                    int zAxisValuePercentage = joystick.getZAxisPercentage();
-                    window.setZAxisGamepad(zAxisValuePercentage);
-                }
-            }
-            
-            // Sets controller buttons
-            JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
-            buttonsPanel.setBounds(6, 19, 246, 110);
-            ArrayList<Boolean> buttonsValues = joystick.getButtonsValues();
-            for(int i=0; i < buttonsValues.size(); i++) {
-                JToggleButton aToggleButton = new JToggleButton(""+(i+1), buttonsValues.get(i));
-                aToggleButton.setPreferredSize(new Dimension(48, 25));
-                aToggleButton.setEnabled(false);
-                buttonsPanel.add(aToggleButton);
-            }
-            window.setControllerButtons(buttonsPanel);
-            
-            // Hat Switch
-            float hatSwitchPosition = joystick.getHatSwitchPosition();
-            window.setHatSwitch(hatSwitchPosition);
-            
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(JoystickTest.class.getName()).log(Level.SEVERE, null, ex);
+                // Add new controller to the list on the window.
+                window.addControllerName(controller.getName() + " - " + controller.getType().toString() + " type");
             }
         }
     }
     
-    
-    
-    
-    /*
-     * Test only for joystick of stick type.
+    /**
+     * Starts showing controller data on the window.
      */
-    private static void stickTypeJoystick_Test(JFrameWindow window)
-    {
-        // Creates controller
-        JInputJoystick joystick = new JInputJoystick(Controller.Type.STICK);
-        
-        // Checks if the controller was found.
-        if( !joystick.isControllerConnected() ){
-            window.setControllerName("No controller found!");
-            return;
-        }
-        
-        // Sets controller name.
-        window.setControllerName(joystick.getControllerName());
-        
+    private void startShowingControllerData(){
         while(true)
         {
-            // Gets current state of joystick! And checks if joystick is disconnected, break while loop.
-            if( !joystick.pollController() ) {
-                window.setControllerName("Controller disconnected!");
+            // Currently selected controller.
+            int selectedControllerIndex = window.getSelectedControllerName();
+            Controller controller = foundControllers.get(selectedControllerIndex);
+
+            // Pull controller for current data, and break while loop if controller is disconnected.
+            if( !controller.poll() ){
+                window.showControllerDisconnected();
                 break;
             }
             
-            // x axis & y axis (left joystick on controller)
-            int xAxisValuePercentage = joystick.getXAxisPercentage();
-            int yAxisValuePercentage = joystick.getYAxisPercentage();
-            window.setXYAxis(xAxisValuePercentage, yAxisValuePercentage);
+            // X axis and Y axis
+            int xAxisPercentage = 0;
+            int yAxisPercentage = 0;
+            // JPanel for other axes.
+            JPanel axesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 25, 2));
+            axesPanel.setBounds(0, 0, 200, 190);
             
-            // z axis & z rotation (right joystick on controller)
-            int zAxisValuePercentage = joystick.getZAxisPercentage();
-            window.setZAxis(zAxisValuePercentage);
-            int zRotationValuePercentage = joystick.getZRotationPercentage();
-            window.setZRotation(zRotationValuePercentage);
-            
-            // Sets controller buttons
+            // JPanel for controller buttons
             JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
             buttonsPanel.setBounds(6, 19, 246, 110);
-            ArrayList<Boolean> buttonsValues = joystick.getButtonsValues();
-            for(int i=0; i < buttonsValues.size(); i++) {
-                JToggleButton aToggleButton = new JToggleButton(""+(i+1), buttonsValues.get(i));
-                aToggleButton.setPreferredSize(new Dimension(48, 25));
-                aToggleButton.setEnabled(false);
-                buttonsPanel.add(aToggleButton);
+                    
+            // Go trough all components of the controller.
+            Component[] components = controller.getComponents();
+            for(int i=0; i < components.length; i++)
+            {
+                Component component = components[i];
+                Identifier componentIdentifier = component.getIdentifier();
+                
+                // Buttons
+                //if(component.getName().contains("Button")){ // If the language is not english, this won't work.
+                if(componentIdentifier.getName().matches("^[0-9]*$")){ // If the component identifier name contains only numbers, then this is a button.
+                    // Is button pressed?
+                    boolean isItPressed = true;
+                    if(component.getPollData() == 0.0f)
+                        isItPressed = false;
+                    
+                    // Button index
+                    String buttonIndex;
+                    buttonIndex = component.getIdentifier().toString();
+                    
+                    // Create and add new button to panel.
+                    JToggleButton aToggleButton = new JToggleButton(buttonIndex, isItPressed);
+                    aToggleButton.setPreferredSize(new Dimension(48, 25));
+                    aToggleButton.setEnabled(false);
+                    buttonsPanel.add(aToggleButton);
+                    
+                    // We know that this component was button so we can skip to next component.
+                    continue;
+                }
+                
+                // Hat switch
+                if(componentIdentifier == Component.Identifier.Axis.POV){
+                    float hatSwitchPosition = component.getPollData();
+                    window.setHatSwitch(hatSwitchPosition);
+                    
+                    // We know that this component was hat switch so we can skip to next component.
+                    continue;
+                }
+                
+                // Axes
+                if(component.isAnalog()){
+                    float axisValue = component.getPollData();
+                    int axisValueInPercentage = getAxisValueInPercentage(axisValue);
+                    
+                    // X axis
+                    if(componentIdentifier == Component.Identifier.Axis.X){
+                        xAxisPercentage = axisValueInPercentage;
+                        continue; // Go to next component.
+                    }
+                    // Y axis
+                    if(componentIdentifier == Component.Identifier.Axis.Y){
+                        yAxisPercentage = axisValueInPercentage;
+                        continue; // Go to next component.
+                    }
+                    
+                    // Other axis
+                    JLabel progressBarLabel = new JLabel(component.getName());
+                    JProgressBar progressBar = new JProgressBar(0, 100);
+                    progressBar.setValue(axisValueInPercentage);
+                    axesPanel.add(progressBarLabel);
+                    axesPanel.add(progressBar);
+                }
             }
+            
+            // Now that we go trough all controller components,
+            // we add butons panel to window,
             window.setControllerButtons(buttonsPanel);
+            // set x and y axes,
+            window.setXYAxis(xAxisPercentage, yAxisPercentage);
+            // add other axes panel to window.
+            window.addAxisPanel(axesPanel);
             
-            // Hat Switch
-            float hatSwitchPosition = joystick.getHatSwitchPosition();
-            window.setHatSwitch(hatSwitchPosition);
-            
+            // We have to give processor some rest.
             try {
-                Thread.sleep(20);
+                Thread.sleep(25);
             } catch (InterruptedException ex) {
                 Logger.getLogger(JoystickTest.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     
+    
+    
+    /**
+     * Given value of axis in percentage.
+     * Percentages increases from left/top to right/bottom.
+     * If idle (in center) returns 50, if joystick axis is pushed to the left/top 
+     * edge returns 0 and if it's pushed to the right/bottom returns 100.
+     * 
+     * @return value of axis in percentage.
+     */
+    public int getAxisValueInPercentage(float axisValue)
+    {
+        return (int)(((2 - (1 - axisValue)) * 100) / 2);
+    }
 }

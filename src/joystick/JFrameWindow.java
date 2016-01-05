@@ -2,9 +2,9 @@ package joystick;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-
 import javax.swing.JPanel;
-
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import net.java.games.input.Component;
 
 /**
@@ -15,16 +15,22 @@ import net.java.games.input.Component;
  * @author TheUzo007
  *         http://theuzo007.wordpress.com
  * 
- * 
+ * Created 22 Oct 2013
  * 
  */
-
 public class JFrameWindow extends javax.swing.JFrame {
     
     /**
      * Creates new form JFrameWindow
      */
     public JFrameWindow() {
+        // Set look and feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        
         initComponents();
         
         this.setResizable(false);
@@ -43,16 +49,11 @@ public class JFrameWindow extends javax.swing.JFrame {
 
         jPanelAxes = new javax.swing.JPanel();
         jLabelXYAxis = new javax.swing.JLabel();
-        progressBarLabel1 = new javax.swing.JLabel();
-        progressBarLabel2 = new javax.swing.JLabel();
-        progressBar1 = new javax.swing.JProgressBar();
-        progressBar2 = new javax.swing.JProgressBar();
         jPanelXYAxis = new javax.swing.JPanel();
-        progressBarLabel3 = new javax.swing.JLabel();
-        progressBar3 = new javax.swing.JProgressBar();
+        jPanel_forAxis = new javax.swing.JPanel();
         jPanelButtons = new javax.swing.JPanel();
         jPanelHatSwitch = new javax.swing.JPanel();
-        jLabelControllerName = new javax.swing.JLabel();
+        jComboBox_controllers = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JInput Joystick Test");
@@ -60,10 +61,6 @@ public class JFrameWindow extends javax.swing.JFrame {
         jPanelAxes.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Axes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(0, 51, 204)));
 
         jLabelXYAxis.setText("X Axis / Y Axis");
-
-        progressBarLabel1.setText("Z Axis");
-
-        progressBarLabel2.setText("Z Rotation");
 
         jPanelXYAxis.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanelXYAxis.setPreferredSize(new java.awt.Dimension(111, 111));
@@ -79,9 +76,16 @@ public class JFrameWindow extends javax.swing.JFrame {
             .addGap(0, 109, Short.MAX_VALUE)
         );
 
-        progressBarLabel3.setText("Z Axis");
-
-        progressBar3.setMaximum(99);
+        javax.swing.GroupLayout jPanel_forAxisLayout = new javax.swing.GroupLayout(jPanel_forAxis);
+        jPanel_forAxis.setLayout(jPanel_forAxisLayout);
+        jPanel_forAxisLayout.setHorizontalGroup(
+            jPanel_forAxisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 202, Short.MAX_VALUE)
+        );
+        jPanel_forAxisLayout.setVerticalGroup(
+            jPanel_forAxisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanelAxesLayout = new javax.swing.GroupLayout(jPanelAxes);
         jPanelAxes.setLayout(jPanelAxesLayout);
@@ -95,36 +99,18 @@ public class JFrameWindow extends javax.swing.JFrame {
                     .addGroup(jPanelAxesLayout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addComponent(jPanelXYAxis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(67, 67, 67)
-                .addGroup(jPanelAxesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(progressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(progressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(progressBarLabel2)
-                    .addComponent(progressBarLabel1)
-                    .addComponent(progressBarLabel3)
-                    .addComponent(progressBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel_forAxis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanelAxesLayout.setVerticalGroup(
             jPanelAxesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelAxesLayout.createSequentialGroup()
-                .addGroup(jPanelAxesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelXYAxis)
-                    .addComponent(progressBarLabel1))
+                .addComponent(jLabelXYAxis)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelAxesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelAxesLayout.createSequentialGroup()
-                        .addComponent(progressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)
-                        .addComponent(progressBarLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(progressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
-                        .addComponent(progressBarLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(progressBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanelXYAxis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanelXYAxis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 16, Short.MAX_VALUE))
+            .addComponent(jPanel_forAxis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jPanelButtons.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Buttons", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(0, 51, 204)));
@@ -146,16 +132,18 @@ public class JFrameWindow extends javax.swing.JFrame {
         jPanelHatSwitch.setLayout(jPanelHatSwitchLayout);
         jPanelHatSwitchLayout.setHorizontalGroup(
             jPanelHatSwitchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 121, Short.MAX_VALUE)
         );
         jPanelHatSwitchLayout.setVerticalGroup(
             jPanelHatSwitchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabelControllerName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelControllerName.setText("Controller name");
-        jLabelControllerName.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jComboBox_controllers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_controllersActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,19 +153,24 @@ public class JFrameWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelHatSwitch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanelAxes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelControllerName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanelHatSwitch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanelAxes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jComboBox_controllers, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(88, 88, 88))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelControllerName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jComboBox_controllers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanelAxes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -189,19 +182,22 @@ public class JFrameWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jComboBox_controllersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_controllersActionPerformed
+        // When another controller is selected we have to remove old stuff.
+        jPanelButtons.removeAll();
+        jPanelButtons.repaint();
+        jPanel_forAxis.removeAll();
+        jPanel_forAxis.repaint();
+    }//GEN-LAST:event_jComboBox_controllersActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabelControllerName;
+    private javax.swing.JComboBox jComboBox_controllers;
     private javax.swing.JLabel jLabelXYAxis;
     private javax.swing.JPanel jPanelAxes;
     private javax.swing.JPanel jPanelButtons;
     private javax.swing.JPanel jPanelHatSwitch;
     private javax.swing.JPanel jPanelXYAxis;
-    private javax.swing.JProgressBar progressBar1;
-    private javax.swing.JProgressBar progressBar2;
-    private javax.swing.JProgressBar progressBar3;
-    private javax.swing.JLabel progressBarLabel1;
-    private javax.swing.JLabel progressBarLabel2;
-    private javax.swing.JLabel progressBarLabel3;
+    private javax.swing.JPanel jPanel_forAxis;
     // End of variables declaration//GEN-END:variables
 
     
@@ -209,8 +205,17 @@ public class JFrameWindow extends javax.swing.JFrame {
     
     /* Methods for setting components on the window. */
     
-    public void setControllerName(String controllerName){
-        jLabelControllerName.setText(controllerName);
+    public int getSelectedControllerName(){
+        return jComboBox_controllers.getSelectedIndex();
+    }
+    
+    public void addControllerName(String controllerName){
+        jComboBox_controllers.addItem(controllerName);
+    }
+    
+    public void showControllerDisconnected(){
+        jComboBox_controllers.removeAllItems();
+        jComboBox_controllers.addItem("Controller disconnected!");
     }
     
     public void setXYAxis(int xPercentage, int yPercentage){
@@ -219,22 +224,10 @@ public class JFrameWindow extends javax.swing.JFrame {
         g2d.fillOval(xPercentage, yPercentage, 10, 10);
     }
     
-    public void setZAxis(int zAxisValueInPercentage){
-        progressBar1.setValue(zAxisValueInPercentage);
-    }
-    
-    public void setZRotation(int zRotationValueInPercentage){
-        progressBar2.setValue(zRotationValueInPercentage);
-    }
-    
-    public void setZAxisGamepad(int zAxisValueInPercentage){
-        progressBar3.setValue(zAxisValueInPercentage);
-    }
-    
     public void setControllerButtons(JPanel buttonsPanel){
         jPanelButtons.removeAll();
         jPanelButtons.add(buttonsPanel);
-        this.validate();
+        jPanelButtons.validate();
     }
 
     public void setHatSwitch(float hatSwitchPosition) {
@@ -288,26 +281,11 @@ public class JFrameWindow extends javax.swing.JFrame {
         
         g2d.fillOval(x, y, smallCircleSize, smallCircleSize);
     }
-    
-    
-    public void setProgressBar1Name(String name)
-    {
-        this.progressBarLabel1.setText(name);
+
+    public void addAxisPanel(javax.swing.JPanel axesPanel){
+        jPanel_forAxis.removeAll();
+        jPanel_forAxis.add(axesPanel);
+        jPanel_forAxis.validate();
     }
     
-    public void setProgressBar2Name(String name)
-    {
-        this.progressBarLabel2.setText(name);
-    }
-    
-    public void setProgressBar3Name(String name)
-    {
-        this.progressBarLabel3.setText(name);
-    }
-    
-    
-    public void hideProgresBar3()
-    {
-        this.progressBar3.setVisible(false);
-    }
 }

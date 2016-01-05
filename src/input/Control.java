@@ -13,19 +13,19 @@ public class Control {
 	
 	long pollNumber = 0;
 	double stickDeadzoneRadius = .15;
-	double triggerDeadzone = .05;
-	int pollingTime = 8;
-	
-	private ArrayList<ButtonHandler> handlers = new ArrayList<ButtonHandler>();
-	
-	private enum Button {
-		A(0),
-		B(1),
-		X(2),
-		Y(3),
-		LB(4),
-		RB(5),
-		BACK(6),
+		double triggerDeadzone = .05;
+		int pollingTime = 8;
+
+		private ArrayList<ButtonHandler> handlers = new ArrayList<ButtonHandler>();
+
+		private enum Button {
+			A(0),
+			B(1),
+			X(2),
+			Y(3),
+			LB(4),
+			RB(5),
+			BACK(6),
 		START(7),
 		LS(8),
 		RS(9);
@@ -50,15 +50,30 @@ public class Control {
 	
 	
 	public Control() {
-		controller = new JInputJoystick(Controller.Type.GAMEPAD);
+
 		try {
 			r = new Robot();
 		} catch (AWTException e1) {
 			e1.printStackTrace();
 		}
-		
-		if(controller.isControllerConnected()) {
-			System.out.println("Connected!");
+
+		try {
+			controller = new JInputJoystick(Controller.Type.GAMEPAD);
+			if (controller.isControllerConnected()) {
+				System.out.println("Controller connected successfully!");
+			} else {
+				System.out.println("Please connect controller!");
+				while(!controller.isControllerConnected()) {
+					controller = new JInputJoystick(Controller.Type.GAMEPAD);
+				}
+				System.out.println("Controller connected successfully!");
+			}
+		} catch(Exception e){
+			System.out.println("Please connect controller!");
+			while(!controller.isControllerConnected()) {
+				controller = new JInputJoystick(Controller.Type.GAMEPAD);
+			}
+			System.out.println("Controller connected successfully!");
 		}
 	}
 	
@@ -93,6 +108,7 @@ public class Control {
 				}
 				
 				if(!Utils.isWithin(0, controller.getZAxisValue(), triggerDeadzone)) {
+
 					if(controller.getZAxisValue() < 0) {
 						h.rt(controller.getZAxisValue());
 					} else {
