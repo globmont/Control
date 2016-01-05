@@ -1,7 +1,7 @@
-var chars = "abcdefghijklmnopqrstuvwxyz1234567890_=+-()*&^%$#@<>/:;[]{}\|'!?,.";
+var chars = "abcdefghijklmnopqrstuvwxyz1234567890_=+-()*&^%$#@<>\\:;[]{}\"|'/!?,.";
 var shift = false;
 var index = 0;
-var animationSpeed = 100;
+var animationSpeed = 0;
 
 function setChar(char, slot) {
 	$("#letter" + slot + " > span").text((shift) ? char.toUpperCase() : char);
@@ -60,6 +60,15 @@ function moveRight() {
 		init();
 		moveLetters("right");
 	});
+}
+
+function getSelectedLetter() {
+	return $("#letter5 > span").text();
+}
+
+function setShift(value) {
+	shift = value;
+	init();
 }
 
 init();

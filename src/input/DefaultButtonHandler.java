@@ -1,10 +1,9 @@
 package input;
 
 import application.Input;
+import javafx.application.Platform;
 
-import java.awt.MouseInfo;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ public class DefaultButtonHandler implements ButtonHandler {
 	
 	ArrayList<Boolean> buttons = new ArrayList<Boolean>();
 	
-	boolean aPressed, bPressed, xPressed, yPressed, lbPressed, rbPressed, backPressed, startPressed, lsPressed, rsPressed, rtPressed, ltPressed, lsMoving, dpadPressed;
-	int aPolls, bPolls, xPolls, yPolls, lbPolls, rbPolls, backPolls, startPolls, lsPolls, rsPolls, rtPolls, ltPolls, dpadPolls;
+	boolean aPressed, bPressed, xPressed, yPressed, lbPressed, rbPressed, backPressed, startPressed, lsPressed, rsPressed, rtPressed, ltPressed, lsMoving, dpadPressed, lsCardinalPressed;
+	int aPolls, bPolls, xPolls, yPolls, lbPolls, rbPolls, backPolls, startPolls, lsPolls, rsPolls, rtPolls, ltPolls, dpadPolls, lsCardinalPolls;
 	double dpadPrevious;
 	boolean dpadArrows = false;
 	//int pollHoldThreshold = 35;
@@ -36,7 +35,8 @@ public class DefaultButtonHandler implements ButtonHandler {
 	boolean numLockWasOn = false;
 
 	private Input keyboard;
-	private Runnable thread;
+
+	private double stickCardinalDeadzone = .3;
 
 	public DefaultButtonHandler(Control c, Input keyboard) {
 		this.control = c;
@@ -119,8 +119,11 @@ public class DefaultButtonHandler implements ButtonHandler {
 
 	@Override
 	public void ls(boolean down) {
-		// TODO Auto-generated method stub
-		
+		if(down) {
+			lsDown();
+		} else {
+			lsUp();
+		}
 	}
 
 	@Override
@@ -185,6 +188,11 @@ public class DefaultButtonHandler implements ButtonHandler {
 	public void xDown() {
 		if(!xPressed) {
 			r.keyPress(KeyEvent.VK_SHIFT);
+			if(lbPressed) {
+				Platform.runLater(() -> {
+					keyboard.setShift(true);
+				});
+			}
 			xPressed = true;
 		}			
 	}
@@ -197,10 +205,19 @@ public class DefaultButtonHandler implements ButtonHandler {
 		}			
 	}
 
-	
+	class Show implements Runnable {
+
+		@Override
+		public void run() {
+			keyboard.show();
+		}
+	}
+
+
 	public void lbDown() {
 		if(!lbPressed) {
-			keyboard.show();
+//			keyboard.show();
+			Platform.runLater(() -> {keyboard.show();});
 			lbPressed = true;
 		}
 	}
@@ -234,8 +251,28 @@ public class DefaultButtonHandler implements ButtonHandler {
 		}
 	}
 
+	public void writeString(String s) {
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (Character.isUpperCase(c)) {
+				r.keyPress(KeyEvent.VK_SHIFT);
+			}
+
+			Integer[] codes = Utils.keyCodes.get(c);
+			pressKeySequence(codes);
+
+			if (Character.isUpperCase(c)) {
+				r.keyRelease(KeyEvent.VK_SHIFT);
+			}
+		}
+		r.delay(0);
+	}
+
 	public void lsDown() {
-		// TODO Auto-generated method stub
+		if(!lsPressed) {
+			lsPressed = true;
+
+		}
 		
 	}
 
@@ -271,6 +308,11 @@ public class DefaultButtonHandler implements ButtonHandler {
 	public void xUp() {
 		if(xPressed) {
 			r.keyRelease(KeyEvent.VK_SHIFT);
+			if(lbPressed) {
+				Platform.runLater(() -> {
+					keyboard.setShift(false);
+				});
+			}
 			xPressed = false;
 		}	
 	}
@@ -286,7 +328,7 @@ public class DefaultButtonHandler implements ButtonHandler {
 	
 	public void lbUp() {
 		if(lbPressed) {
-			keyboard.hide();
+			Platform.runLater(() -> {keyboard.hide();});
 			lbPressed = false;
 		}
 		
@@ -317,7 +359,9 @@ public class DefaultButtonHandler implements ButtonHandler {
 
 	
 	public void lsUp() {
-		// TODO Auto-generated method stub
+		if(lsPressed) {
+			lsPressed = false;
+		}
 		
 	}
 
@@ -338,14 +382,25 @@ public class DefaultButtonHandler implements ButtonHandler {
 
 	
 	public void rtDown() {
+
 		if(!rtPressed) {
-			r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 			rtPressed = true;
-			
-			if(rsPressed) {
-				r.mousePress(InputEvent.BUTTON2_DOWN_MASK);
+			if(lbPressed) {
+				Platform.runLater(() -> {
+					String letter = keyboard.getLetter();
+					System.out.println(letter);
+					writeString(letter);
+				});
+			} else {
+				r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+
+
+				if (rsPressed) {
+					r.mousePress(InputEvent.BUTTON2_DOWN_MASK);
+				}
 			}
 		}
+
 	}
 
 	
@@ -375,9 +430,13 @@ public class DefaultButtonHandler implements ButtonHandler {
 		
 		mouseX += dx;
 		mouseY += dy;
-		
-		r.mouseMove((int)Math.round(mouseX), (int)Math.round(mouseY));
-		
+
+		if(lbPressed) {
+			Platform.runLater(() -> {keyboard.updateLocation();});
+		}
+
+		r.mouseMove((int) Math.round(mouseX), (int) Math.round(mouseY));
+
 	}
 
 	@Override
@@ -389,7 +448,30 @@ public class DefaultButtonHandler implements ButtonHandler {
 				lsMoving = true;
 			}
 		} else { //keyboard
+			if(x >= stickCardinalDeadzone) {
+				lsCardinalPolls++;
+				if(!lsCardinalPressed || lsCardinalPressed && lsCardinalPolls >= 100 && lsCardinalPolls % 10 == 0) {
+					lsCardinalPressed = true;
+					Platform.runLater(() -> {
+						keyboard.moveRight();
+					});
+				}
+				if(lsCardinalPolls == 75) {
+					lsCardinalPressed = false;
+				}
+			} else if(x <= -stickCardinalDeadzone) {
+				lsCardinalPolls++;
+				if(!lsCardinalPressed || lsCardinalPressed && lsCardinalPolls >= 100 && lsCardinalPolls % 10 == 0) {
+					lsCardinalPressed = true;
+					Platform.runLater(() -> {
+						keyboard.moveLeft();
+					});
+				}
 
+				if(lsCardinalPolls == 75) {
+					lsCardinalPressed = false;
+				}
+			}
 		}
 		
 	}
@@ -403,7 +485,9 @@ public class DefaultButtonHandler implements ButtonHandler {
 	@Override
 	public void lsNotMove() {
 		lsMoving = false;
+		lsCardinalPressed = false;
 		lsPolls = 0;
+		lsCardinalPolls = 0;
 	}
 	
 	int i = 0;
@@ -455,6 +539,18 @@ public class DefaultButtonHandler implements ButtonHandler {
 		r.keyPress(KeyEvent.VK_NUM_LOCK);
 		r.keyRelease(KeyEvent.VK_NUM_LOCK);
 	}
-	
-	
+
+
+	private void pressKeySequence(Integer[] keys) {
+		for(int i = 0; i < keys.length; i++) {
+			r.keyPress(keys[i]);
+		}
+
+		for(int i = keys.length - 1; i >= 0; i--) {
+			r.keyRelease(keys[i]);
+		}
+	}
+
+
 }
+

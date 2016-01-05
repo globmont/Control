@@ -1,12 +1,6 @@
 package application;
-	
-import java.lang.reflect.Field;
-
-import javafx.application.Platform;
-import org.w3c.dom.Document;
 
 import com.sun.webkit.WebPage;
-
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,14 +12,18 @@ import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.w3c.dom.Document;
+
+import java.awt.*;
+import java.lang.reflect.Field;
 
 
 public class Input extends Application implements Runnable {
 	
-	private Stage primaryStage;
-	private Stage subStage;
+	private static Stage primaryStage;
+	private static Stage subStage;
 	private BorderPane rootLayout;
-	private WebEngine webengine;
+	private static WebEngine webengine;
 
 
 	@Override
@@ -35,7 +33,7 @@ public class Input extends Application implements Runnable {
 		this.primaryStage.setMaxHeight(0);
 		this.primaryStage.setMaxWidth(0);
 		this.primaryStage.setX(Double.MAX_VALUE);
-		
+
 		
 		initRootLayout();
 	}
@@ -51,35 +49,44 @@ public class Input extends Application implements Runnable {
 			scene.getStylesheets().add(getClass().getResource("flatterfx.css").toExternalForm());
 			
 			WebView web = (WebView) scene.lookup("#main");
+			web.setContextMenuEnabled(false);
 			this.webengine = web.getEngine();
             webengine.documentProperty().addListener(new DocListener());
-//            webengine.loadContent("<body>Test Transparent</body>");
 
 			String url = getClass().getResource("/html/index.html").toExternalForm();
 			web.getEngine().load(url);
-			
-			
-			
+
+
 			this.subStage = new Stage();
 			subStage.initStyle(StageStyle.TRANSPARENT);
-			subStage.initModality(Modality.WINDOW_MODAL);
+			subStage.initModality(Modality.APPLICATION_MODAL);
 			subStage.setTitle("SubStage");
 			subStage.initOwner(this.primaryStage);
 			subStage.setScene(scene);
-			subStage.hide();
+			subStage.show();
+			hide();
+
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+
 	public void moveLeft() {
 		webengine.executeScript("moveLeft()");
-
 	}
 
 	public void moveRight() {
 		webengine.executeScript("moveRight()");
+	}
+
+	public String getLetter() {
+		return (String) webengine.executeScript("getSelectedLetter()");
+	}
+
+	public void setShift(boolean value) {
+		webengine.executeScript("setShift(" + value + ")");
 	}
 	
 	public static void main(String[] args) {
@@ -92,12 +99,24 @@ public class Input extends Application implements Runnable {
 	}
 
 	public void hide() {
-		System.out.println("Substage: " + subStage);
+		/*System.out.println("Hide Substage: " + subStage);
+		System.out.println("Hide Primary Stage: " + primaryStage);
+		System.out.println("Hide Platform FX Thread: " + Platform.isFxApplicationThread());*/
 		subStage.hide();
+
 	}
 
 	public void show() {
+		/*System.out.println("Show Substage: " + subStage);
+		System.out.println("Show Primary Stage: " + primaryStage);
+		System.out.println("Show Platform FX Thread: " + Platform.isFxApplicationThread());*/
+		updateLocation();
 		subStage.show();
+	}
+
+	public void updateLocation() {
+		subStage.setX(MouseInfo.getPointerInfo().getLocation().getX());
+		subStage.setY(MouseInfo.getPointerInfo().getLocation().getY());
 	}
 
 	class DocListener implements ChangeListener<Document>{
@@ -115,5 +134,7 @@ public class Input extends Application implements Runnable {
              }
 
          }
-     }  
+     }
+
+
 }
