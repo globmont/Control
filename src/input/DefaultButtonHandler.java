@@ -273,7 +273,9 @@ public class DefaultButtonHandler implements ButtonHandler {
 	public void lsDown() {
 		if(!lsPressed) {
 			lsPressed = true;
-
+			Platform.runLater(() -> {
+				keyboard.setIndex(0);
+			});
 		}
 		
 	}
@@ -449,7 +451,7 @@ public class DefaultButtonHandler implements ButtonHandler {
 				lsMoving = true;
 			}
 		} else { //keyboard
-			if(x >= stickCardinalDeadzone) {
+			if(x >= stickCardinalDeadzone && Utils.isWithin(0, y, stickCardinalDeadzone)) {
 				lsCardinalPolls++;
 				if(!lsCardinalPressed || lsCardinalPressed && lsCardinalPolls >= 100 && lsCardinalPolls % 10 == 0) {
 					lsCardinalPressed = true;
@@ -460,12 +462,36 @@ public class DefaultButtonHandler implements ButtonHandler {
 				if(lsCardinalPolls == 75) {
 					lsCardinalPressed = false;
 				}
-			} else if(x <= -stickCardinalDeadzone) {
+			} else if(x <= -stickCardinalDeadzone && Utils.isWithin(0, y, stickCardinalDeadzone)) {
 				lsCardinalPolls++;
 				if(!lsCardinalPressed || lsCardinalPressed && lsCardinalPolls >= 100 && lsCardinalPolls % 10 == 0) {
 					lsCardinalPressed = true;
 					Platform.runLater(() -> {
 						keyboard.moveLeft();
+					});
+				}
+
+				if(lsCardinalPolls == 75) {
+					lsCardinalPressed = false;
+				}
+			} else if(y >= stickCardinalDeadzone && Utils.isWithin(0, x, stickCardinalDeadzone)) {
+				lsCardinalPolls++;
+				if(!lsCardinalPressed || lsCardinalPressed && lsCardinalPolls >= 100 && lsCardinalPolls % 10 == 0) {
+					lsCardinalPressed = true;
+					Platform.runLater(() -> {
+						keyboard.movePageLeft();
+					});
+				}
+
+				if(lsCardinalPolls == 75) {
+					lsCardinalPressed = false;
+				}
+			} else if(y <= -stickCardinalDeadzone && Utils.isWithin(0, x, stickCardinalDeadzone)) {
+				lsCardinalPolls++;
+				if(!lsCardinalPressed || lsCardinalPressed && lsCardinalPolls >= 100 && lsCardinalPolls % 10 == 0) {
+					lsCardinalPressed = true;
+					Platform.runLater(() -> {
+						keyboard.movePageRight();
 					});
 				}
 

@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 import org.w3c.dom.Document;
 
 import javax.swing.*;
@@ -56,25 +57,25 @@ public class Input extends Application implements Runnable {
 			String url = getClass().getResource("/html/index.html").toExternalForm();
 			web.getEngine().load(url);
 
-//			JSObject dimObj = (JSObject) webengine.executeScript("getDimensions()");
-//			int width = (Integer) dimObj.getMember("width");
-//			int height = (Integer) dimObj.getMember("height");
 
-			int width = 630;
-			int height = 150;
+//			int width = 630;
+//			int height = 150;
+
 
 			window = new JFrame();
 			window.setAutoRequestFocus(false);
 			window.setAlwaysOnTop(true);
 //			window.setFocusable(false);
 //			window.setFocusableWindowState(false);
+
 			window.setType(JFrame.Type.UTILITY);
 			window.setUndecorated(true);
-			window.setSize(width, height);
 			final JFXPanel panel = new JFXPanel();
 //			panel.setSize(630, 150);
 			panel.setScene(scene);
 			window.add(panel);
+
+
 //			window.setVisible(true);
 //			System.out.println("Window showing: " + window.isShowing());
 
@@ -98,8 +99,18 @@ public class Input extends Application implements Runnable {
 		webengine.executeScript("moveLeft()");
 	}
 
+	public void movePageLeft() {
+		int index = getIndex();
+		setIndex(index - 9);
+	}
+
 	public void moveRight() {
 		webengine.executeScript("moveRight()");
+	}
+
+	public void movePageRight() {
+		int index = getIndex();
+		setIndex(index + 9);
 	}
 
 	public String getLetter() {
@@ -108,6 +119,14 @@ public class Input extends Application implements Runnable {
 
 	public void setShift(boolean value) {
 		webengine.executeScript("setShift(" + value + ")");
+	}
+
+	public void setIndex(int value) {
+		webengine.executeScript("setIndex(" + value + ");");
+	}
+
+	public int getIndex() {
+		return (Integer) webengine.executeScript("index");
 	}
 	
 	public static void main(String[] args) {
@@ -142,6 +161,11 @@ public class Input extends Application implements Runnable {
 //		subStage.setY(MouseInfo.getPointerInfo().getLocation().getY());
 		window.setLocation((int) Math.round(MouseInfo.getPointerInfo().getLocation().getX()),
 						   (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()));
+
+		JSObject dimObj = (JSObject) webengine.executeScript("getDimensions()");
+		int width = (Integer) dimObj.getMember("width");
+		int height = (Integer) dimObj.getMember("height");
+		window.setSize(width, height);
 	}
 
 	class DocListener implements ChangeListener<Document>{

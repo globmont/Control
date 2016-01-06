@@ -1,7 +1,7 @@
 var chars = "abcdefghijklmnopqrstuvwxyz1234567890_=+-()*&^%$#@<>\\:;[]{}\"|'/!?,.";
 var shift = false;
 var index = 0;
-var animationSpeed = 0;
+var animationSpeed = 200;
 
 function setChar(char, slot) {
 	$("#letter" + slot + " > span").text((shift) ? char.toUpperCase() : char);
@@ -32,35 +32,51 @@ function init() {
 function translateLetters(direction, callback) {
 	var done = 0;
 	if(direction === "left") {
-		$(".letter > span").animate({marginLeft: "-=70"}, animationSpeed, "swing", function() {done++; if(done == 11) {callback()}});
+		$(".letter > span").animate({left: "-=70"}, animationSpeed, "swing", function() {done++; if(done == 11) {callback()}});
+		// $("#letter6").animate({color: jQuery.color("#534B52")}, animationSpeed);	
 	} else if(direction === "right") {
-		$(".letter > span").animate({marginLeft: "+=70"}, animationSpeed, "swing", function() {done++; if(done == 11) {callback()}});
+		$(".letter > span").animate({left: "+=70"}, animationSpeed, "swing", function() {done++; if(done == 11) {callback()}});
+		// $("#letter4").animate({color: jQuery.color("#534B52")}, animationSpeed);	
 	}
+	// $("#letter5").animate({color: jQuery.color("#E0DDCF")}, animationSpeed);
+
+}
+
+function finishAnimations() {
+	$(".letter > span").finish();
+	$(".letter").finish();
+}
+
+
+function setIndex(value) {
+	index = value;
+	init();
 }
 
 function moveLetters(direction, callback) {
 	if(direction === "left") {
-		$(".letter > span").css({marginLeft: "-=70"}, animationSpeed, callback);
+		$(".letter > span").css({left: "-=70"}, animationSpeed, callback);
 	} else if(direction === "right") {
-		$(".letter > span").css({marginLeft: "+=70"}, animationSpeed, callback);
+		$(".letter > span").css({left: "+=70"}, animationSpeed, callback);
 	}
 }
 
-function moveLeft() {
+function moveLeft(numTimes) {
+	finishAnimations();
 	translateLetters("right", function() {
-		index--;
-		init();
+		setIndex(index - 1);
 		moveLetters("left");
 	});
 }
 
-function moveRight() {
+function moveRight(numTimes) {
+	finishAnimations();
 	translateLetters("left", function() {
-		index++;
-		init();
+		setIndex(index + 1);
 		moveLetters("right");
 	});
 }
+
 
 function getSelectedLetter() {
 	return $("#letter5 > span").text();
