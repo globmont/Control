@@ -13,4 +13,5 @@ public interface ButtonBroadcaster {
     public void removeListener(ButtonListener listener);
     public void setMode(Control.Button button, ButtonState.Mode mode);
     public void setPushFrequency(Control.Button button, int frequency);
+    public void setHoldStart(Control.Button button, int holdStart);
 }

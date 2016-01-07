@@ -156,5 +156,10 @@ public class DefaultButtonBroadcaster implements ButtonBroadcaster {
 	public void setPushFrequency(Control.Button button, int frequency) {
 		states.get(button).setPushFrequency(frequency);
 	}
+
+	@Override
+	public void setHoldStart(Control.Button button, int holdStart) {
+		states.get(button).setHoldStart(holdStart);
+	}
 }
 

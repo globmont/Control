@@ -17,11 +17,18 @@ public class MouseEventButtonListener implements ButtonListener {
             e.printStackTrace();
         }
 
-        // TODO: 1/6/2016 replace hardcoded bindings with file read
-        mouseMappings.put(Control.Button.LS, "middleClick");
-        mouseMappings.put(Control.Button.RS, "rightClick");
-        mouseMappings.put(Control.Button.RT, "leftClick");
+    }
 
+    public void setMappings(HashMap<Control.Button, String> mappings) {
+        this.mouseMappings = mappings;
+    }
+
+    public void addMapping(Control.Button button, String mouseButton) {
+        mouseMappings.put(button, mouseButton);
+    }
+
+    public void clearMappings() {
+        this.mouseMappings = new HashMap<>();
     }
 
     @Override

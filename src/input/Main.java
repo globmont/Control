@@ -7,6 +7,9 @@ public class Main {
 		Utils.init();
 		Input keyboard = new Input();
 		Control c = new Control(keyboard);
+		ConfigHandler config = new ConfigHandler(c, "config.ini");
+		config.readConfig();
+		config.applyButtonStateParameters();
 		new Thread(keyboard).start();
 //		keyboard.run();
 //		keyboard.hide();

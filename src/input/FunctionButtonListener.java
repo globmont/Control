@@ -26,20 +26,20 @@ public class FunctionButtonListener implements ButtonListener {
             e.printStackTrace();
         }
 
-        // TODO: 1/5/2016 replace hardcoded bindings with file read
-        functionMappings.put(Control.Button.X,  new String[] {"keyboardShift"});
-        functionMappings.put(Control.Button.RT,  new String[] {"keyboardSelect"});
-        functionMappings.put(Control.Button.LB,  new String[] {"keyboardToggle"});
-        functionMappings.put(Control.Button.RB,  new String[] {"slowToggle"});
-        functionMappings.put(Control.Button.LS,  new String[] {"keyboardReset"});
-        functionMappings.put(Control.Button.START, new String[] {"toggleDpad"});
-        functionMappings.put(Control.Button.LSU, new String[] {"scrollUp", "keyboardMovePageRight"});
-        functionMappings.put(Control.Button.LSR, new String[] {"keyboardMoveRight"});
-        functionMappings.put(Control.Button.LSD, new String[] {"scrollDown", "keyboardMovePageLeft"});
-        functionMappings.put(Control.Button.LSL, new String[] {"keyboardMoveLeft"});
-        functionMappings.put(Control.Button.MRS, new String[] {"mouseMove"});
     }
 
+
+    public void setMappings(HashMap<Control.Button, String[]> mappings) {
+        this.functionMappings = mappings;
+    }
+
+    public void addMapping(Control.Button button, String[] functions) {
+        functionMappings.put(button, functions);
+    }
+
+    public void clearMappings() {
+        this.functionMappings = new HashMap<>();
+    }
 
     @Override
     public void pressed(Control.Button button) {

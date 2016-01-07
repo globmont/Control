@@ -94,32 +94,6 @@ public class Control {
 		stickToCardinalMap.put(Stick.LS, new Button[] {Button.LSU, Button.LSR, Button.LSD, Button.LSL});
 		stickToCardinalMap.put(Stick.RS, new Button[] {Button.RSU, Button.RSR, Button.RSD, Button.RSL});
 
-		// TODO: 1/6/2016 implement file read for stick declarations
-		stickStateMap.put(Stick.LS, new StickState(StickState.Mode.DISCRETE, Stick.LS, this, new String[][] {{"function"}, {"function"}, {"function"}, {"function"}}));
-		stickStateMap.put(Stick.RS, new StickState(StickState.Mode.CONTINUOUS, Stick.RS, this, new String[][] {{"function"}}));
-
-		// TODO: 1/6/2016 implement file read for binding types instead of hardcode
-		bindingTypes.put(Button.A, new String[] {"keyPress"});
-		bindingTypes.put(Button.B, new String[] {"keyPress"});
-		bindingTypes.put(Button.X, new String[] {"function", "keyPress"});
-		bindingTypes.put(Button.Y, new String[] {"keyPress"});
-		bindingTypes.put(Button.DU, new String[] {"keyPress"});
-		bindingTypes.put(Button.DR, new String[] {"keyPress"});
-		bindingTypes.put(Button.DD, new String[] {"keyPress"});
-		bindingTypes.put(Button.DL, new String[] {"keyPress"});
-		bindingTypes.put(Button.ADU, new String[] {"keyPress"});
-		bindingTypes.put(Button.ADR, new String[] {"keyPress"});
-		bindingTypes.put(Button.ADD, new String[] {"keyPress"});
-		bindingTypes.put(Button.ADL, new String[] {"keyPress"});
-		bindingTypes.put(Button.BACK, new String[] {"keyPress"});
-		bindingTypes.put(Button.LB, new String[] {"function"});
-		bindingTypes.put(Button.RB, new String[] {"function"});
-		bindingTypes.put(Button.START, new String[] {"function"});
-		bindingTypes.put(Button.LS, new String[] {"function", "mouseEvent"});
-		bindingTypes.put(Button.RS, new String[] {"mouseEvent"});
-		bindingTypes.put(Button.RT, new String[] {"function", "mouseEvent"});
-		bindKeys();
-
 		try {
 			r = new Robot();
 		} catch (AWTException e1) {
@@ -381,10 +355,7 @@ public class Control {
 		this.fastMouseMoveScale = fastMouseMoveScale;
 	}
 
-	private void bindKeys() {
-		keyPressListener = new KeyPressButtonListener();
-		functionListener = new FunctionButtonListener(keyboard, this);
-		mouseEventListener = new MouseEventButtonListener();
+	public void bindKeys() {
 
 		for(Button button : bindingTypes.keySet()) {
 			bb.clearListeners(button);
@@ -404,7 +375,7 @@ public class Control {
 			}
 		}
 
-		bb.setMode(Button.DU, ButtonState.Mode.REPEAT_DELAY);
+		/*bb.setMode(Button.DU, ButtonState.Mode.REPEAT_DELAY);
 		bb.setMode(Button.DR, ButtonState.Mode.REPEAT_DELAY);
 		bb.setMode(Button.DD, ButtonState.Mode.REPEAT_DELAY);
 		bb.setMode(Button.DL, ButtonState.Mode.REPEAT_DELAY);
@@ -420,6 +391,40 @@ public class Control {
 		bb.setMode(Button.LSL, ButtonState.Mode.REPEAT_DELAY);
 
 		bb.setMode(Button.MRS, ButtonState.Mode.REPEAT_INSTANT);
-		bb.setPushFrequency(Button.MRS, 1);
+		bb.setPushFrequency(Button.MRS, 1);*/
+	}
+
+	public void setButtonMode(Button button, ButtonState.Mode mode) {
+		bb.setMode(button, mode);
+	}
+
+	public void setButtonHoldStart(Button button, int holdStart) {
+		bb.setHoldStart(button, holdStart);
+	}
+
+	public void setButtonPushFrequency(Button button, int pushFrequency) {
+		bb.setPushFrequency(button, pushFrequency);
+	}
+
+	public void clearBindingTypes() {
+		bindingTypes.clear();
+	}
+
+	public void resetListeners() {
+		keyPressListener = new KeyPressButtonListener();
+		functionListener = new FunctionButtonListener(keyboard, this);
+		mouseEventListener = new MouseEventButtonListener();
+	}
+
+	public KeyPressButtonListener getKeyPressListener() {
+		return keyPressListener;
+	}
+
+	public FunctionButtonListener getFunctionListener() {
+		return functionListener;
+	}
+
+	public MouseEventButtonListener getMouseEventListener() {
+		return mouseEventListener;
 	}
 }
