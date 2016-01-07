@@ -417,7 +417,7 @@ public class JInputJoystick {
      * 
      * @return Float number that corresponds with the Hat Switch position.
      */
-    public float getHatSwitchPosition()
+    public double getHatSwitchPosition()
     {
         Identifier identifier = Component.Identifier.Axis.POV;
         return controller.getComponent(identifier).getPollData();

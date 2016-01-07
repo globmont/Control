@@ -1,10 +1,12 @@
 package input;
 
+import application.Input;
 import joystick.JInputJoystick;
 import net.java.games.input.Controller;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Control {
 	JInputJoystick controller;
@@ -12,43 +14,111 @@ public class Control {
 	
 	long pollNumber = 0;
 	double stickDeadzoneRadius = .15;
-		double triggerDeadzone = .05;
-		int pollingTime = 8;
+	private double stickCardinalDeadzone = .3;
+	double triggerDeadzone = .05;
+	int pollingTime = 8;
 
-		private ArrayList<ButtonHandler> handlers = new ArrayList<ButtonHandler>();
 
-		private enum Button {
-			A(0),
-			B(1),
-			X(2),
-			Y(3),
-			LB(4),
-			RB(5),
-			BACK(6),
-		START(7),
-		LS(8),
-		RS(9);
-		
-		private int index;
-		
-		private Button(int index) {
-			this.index = index;
-		}
-		
-		public int getIndex() {
-			return index;
-		}
-	}
+	private boolean dpadToggle = false;
+	private boolean keyboardVisible = false;
+	private boolean keyboardShift = false;
+
+	int slowMouseMoveScale = 1;
+	int fastMouseMoveScale = 10;
+	int mouseMoveScale = fastMouseMoveScale;
+
+	int slowScrollScale = 1;
+	int fastScrollScale = 3;
+	int scrollScale = fastScrollScale;
+
+
+	private ButtonBroadcaster bb = new DefaultButtonBroadcaster(10, 100, ButtonState.Mode.SINGLE);
+	private ArrayList<ButtonHandler> handlers = new ArrayList<>();
+
+	private HashMap<Button, String[]> bindingTypes = new HashMap<>();
+	private KeyPressButtonListener keyPressListener;
+	private FunctionButtonListener functionListener;
+	private MouseEventButtonListener mouseEventListener;
+	private HashMap<Stick, StickState> stickStateMap = new HashMap<>();
+	private HashMap<Stick, Button[]> stickToCardinalMap = new HashMap<>();
+
+	private Input keyboard;
+
+	public enum Button {
+		A,
+		B,
+		X,
+		Y,
+		LB,
+		RB,
+		BACK,
+		START,
+		LS,
+		RS,
+		DU,
+		DD,
+		DL,
+		DR,
+		ADU,
+		ADD,
+		ADL,
+		ADR,
+		RT,
+		LT,
+		LSU,
+		LSR,
+		LSD,
+		LSL,
+		RSU,
+		RSR,
+		RSD,
+		RSL,
+		MLS,
+		MRS;
+}
 	
-	private enum Stick {
+	public enum Stick {
 		XROT,
 		YROT,
 		XAXIS,
-		YAXIS;
+		YAXIS,
+		LS,
+		RS;
 	}
 	
 	
-	public Control() {
+	public Control(Input keyboard) {
+
+		this.keyboard = keyboard;
+
+		stickToCardinalMap.put(Stick.LS, new Button[] {Button.LSU, Button.LSR, Button.LSD, Button.LSL});
+		stickToCardinalMap.put(Stick.RS, new Button[] {Button.RSU, Button.RSR, Button.RSD, Button.RSL});
+
+		// TODO: 1/6/2016 implement file read for stick declarations
+		stickStateMap.put(Stick.LS, new StickState(StickState.Mode.DISCRETE, Stick.LS, this, new String[][] {{"function"}, {"function"}, {"function"}, {"function"}}));
+		stickStateMap.put(Stick.RS, new StickState(StickState.Mode.CONTINUOUS, Stick.RS, this, new String[][] {{"function"}}));
+
+		// TODO: 1/6/2016 implement file read for binding types instead of hardcode
+		bindingTypes.put(Button.A, new String[] {"keyPress"});
+		bindingTypes.put(Button.B, new String[] {"keyPress"});
+		bindingTypes.put(Button.X, new String[] {"function", "keyPress"});
+		bindingTypes.put(Button.Y, new String[] {"keyPress"});
+		bindingTypes.put(Button.DU, new String[] {"keyPress"});
+		bindingTypes.put(Button.DR, new String[] {"keyPress"});
+		bindingTypes.put(Button.DD, new String[] {"keyPress"});
+		bindingTypes.put(Button.DL, new String[] {"keyPress"});
+		bindingTypes.put(Button.ADU, new String[] {"keyPress"});
+		bindingTypes.put(Button.ADR, new String[] {"keyPress"});
+		bindingTypes.put(Button.ADD, new String[] {"keyPress"});
+		bindingTypes.put(Button.ADL, new String[] {"keyPress"});
+		bindingTypes.put(Button.BACK, new String[] {"keyPress"});
+		bindingTypes.put(Button.LB, new String[] {"function"});
+		bindingTypes.put(Button.RB, new String[] {"function"});
+		bindingTypes.put(Button.START, new String[] {"function"});
+		bindingTypes.put(Button.LS, new String[] {"function", "mouseEvent"});
+		bindingTypes.put(Button.RS, new String[] {"mouseEvent"});
+		bindingTypes.put(Button.RT, new String[] {"function", "mouseEvent"});
+		bindKeys();
 
 		try {
 			r = new Robot();
@@ -89,38 +159,9 @@ public class Control {
 			}
 			
 			pollNumber++;
-			
-			
-			
-			
-			for(ButtonHandler h: handlers) {
-				
-				if(!Utils.isWithin(0, getAdjustedStickValue(Stick.XROT), 0) || !Utils.isWithin(0, getAdjustedStickValue(Stick.YROT), 0)) {
-					h.rsMove(getAdjustedStickValue(Stick.XROT), getAdjustedStickValue(Stick.YROT));
-				} else {
-					h.rsNotMove();
-				}
-				
-				if(!Utils.isWithin(0, getAdjustedStickValue(Stick.XAXIS), 0) || !Utils.isWithin(0, getAdjustedStickValue(Stick.YAXIS), 0)) {
-					h.lsMove(getAdjustedStickValue(Stick.XAXIS), getAdjustedStickValue(Stick.YAXIS));
-				} else {
-					h.lsNotMove();
-				}
-				
-				if(!Utils.isWithin(0, controller.getZAxisValue(), triggerDeadzone)) {
 
-					if(controller.getZAxisValue() < 0) {
-						h.rt(controller.getZAxisValue());
-					} else {
-						h.lt(controller.getZAxisValue());
-					}
-				}
-				
-				h.dpad(controller.getHatSwitchPosition());
-				
-				h.handleButtonArray(controller.getButtonsValues());
-
-			}
+			ArrayList<Control.Button> pressedButtons = getPressedButtons();
+			bb.pollButtons(pressedButtons);
 			
 			
 			try {
@@ -134,12 +175,7 @@ public class Control {
 	public void addButtonHandler(ButtonHandler b) {
 		handlers.add(b);
 	}
-	
-	private boolean getButtonValue(Button b) {
-		return controller.getButtonValue(b.getIndex());
-	}
-	
-	
+
 	public double getAdjustedStickValue(Stick stick) {
 		if(stick == Stick.XAXIS) {
 			return (Utils.isWithin(0, controller.getXAxisValue(), stickDeadzoneRadius)) ? 0 : controller.getXAxisValue(); 
@@ -153,6 +189,237 @@ public class Control {
 		
 		return Double.NaN;
 	}
-	
-		
+
+	private ArrayList<Control.Button> getPressedButtons() {
+		ArrayList<Boolean> buttonValues = controller.getButtonsValues();
+		ArrayList<Control.Button> list = new ArrayList<>();
+		if(buttonValues.get(0)) {
+			list.add(Button.A);
+		}
+		if(buttonValues.get(1)) {
+			list.add(Button.B);
+		}
+		if(buttonValues.get(2)) {
+			list.add(Button.X);
+		}
+		if(buttonValues.get(3)) {
+			list.add(Button.Y);
+		}
+		if(buttonValues.get(4)) {
+			list.add(Button.LB);
+		}
+		if(buttonValues.get(5)) {
+			list.add(Button.RB);
+		}
+		if(buttonValues.get(6)) {
+			list.add(Button.BACK);
+		}
+		if(buttonValues.get(7)) {
+			list.add(Button.START);
+		}
+		if(buttonValues.get(8)) {
+			list.add(Button.LS);
+		}
+		if(buttonValues.get(9)) {
+			list.add(Button.RS);
+		}
+
+		double hatPosition = controller.getHatSwitchPosition();
+		if(hatPosition == .25) {
+			if(!dpadToggle) {
+				list.add(Button.DU);
+			} else {
+				list.add(Button.ADU);
+			}
+		} else if(hatPosition == .5) {
+			if(!dpadToggle) {
+				list.add(Button.DR);
+			} else {
+				list.add(Button.ADR);
+			}
+		} else if(hatPosition == .75) {
+			if(!dpadToggle) {
+				list.add(Button.DD);
+			} else {
+				list.add(Button.ADD);
+			}
+		} else if(hatPosition == 1) {
+			if(!dpadToggle) {
+				list.add(Button.DL);
+			} else {
+				list.add(Button.ADL);
+			}
+		}
+
+		if(!Utils.isWithin(0, controller.getZAxisValue(), triggerDeadzone)) {
+			if(controller.getZAxisValue() < 0) {
+				list.add(Button.RT);
+			} else {
+				list.add(Button.LT);
+			}
+		}
+
+		double rsX = getAdjustedStickValue(Stick.XROT);
+		double rsY = getAdjustedStickValue(Stick.YROT);
+		double lsX = getAdjustedStickValue(Stick.XAXIS);
+		double lsY = getAdjustedStickValue(Stick.YAXIS);
+
+
+		if(!Utils.isWithin(0, rsX, stickDeadzoneRadius) || !Utils.isWithin(0, rsY, stickDeadzoneRadius)) {
+			list.add(Button.MRS);
+		}
+
+		if(!Utils.isWithin(0, lsX, stickDeadzoneRadius) || !Utils.isWithin(0, lsY, stickDeadzoneRadius)) {
+			list.add(Button.MLS);
+		}
+
+		if(rsX >= stickCardinalDeadzone && Utils.isWithin(0, rsY, stickCardinalDeadzone)) {
+			list.add(Button.RSR);
+		} else if(rsX <= -stickCardinalDeadzone && Utils.isWithin(0, rsY, stickCardinalDeadzone)) {
+			list.add(Button.RSL);
+		} else if(rsY >= stickCardinalDeadzone && Utils.isWithin(0, rsX, stickCardinalDeadzone)) {
+			list.add(Button.RSD);
+		} else if(rsY <= -stickCardinalDeadzone && Utils.isWithin(0, rsX, stickCardinalDeadzone)) {
+			list.add(Button.RSU);
+		}
+
+		if(lsX >= stickCardinalDeadzone && Utils.isWithin(0, lsY, stickCardinalDeadzone)) {
+			list.add(Button.LSR);
+		} else if(lsX <= -stickCardinalDeadzone && Utils.isWithin(0, lsY, stickCardinalDeadzone)) {
+			list.add(Button.LSL);
+		} else if(lsY >= stickCardinalDeadzone && Utils.isWithin(0, lsX, stickCardinalDeadzone)) {
+			list.add(Button.LSD);
+		} else if(lsY <= -stickCardinalDeadzone && Utils.isWithin(0, lsX, stickCardinalDeadzone)) {
+			list.add(Button.LSU);
+		}
+
+		return list;
+	}
+
+	public boolean getDpadToggle() {
+		return dpadToggle;
+	}
+
+	public void setDpadToggle(boolean value) {
+		dpadToggle = value;
+	}
+
+
+	public boolean isKeyboardVisible() {
+		return keyboardVisible;
+	}
+
+	public void setKeyboardVisible(boolean keyboardVisible) {
+		this.keyboardVisible = keyboardVisible;
+	}
+
+	public boolean isKeyboardShift() {
+		return keyboardShift;
+	}
+
+	public void setKeyboardShift(boolean keyboardShift) {
+		this.keyboardShift = keyboardShift;
+	}
+
+	public void addBindingType(Button button, String[] bindingType) {
+		bindingTypes.put(button, bindingType);
+	}
+
+	public void removeBindingType(Button button, String[] bindingType) {
+		bindingTypes.remove(button, bindingType);
+	}
+
+	public Button[] getStickToCardinal(Stick stick) {
+		return stickToCardinalMap.get(stick);
+	}
+
+	public int getScrollScale() {
+		return scrollScale;
+	}
+
+	public void setScrollScale(int scale) {
+		scrollScale = scale;
+	}
+
+	public int getFastScrollScale() {
+		return fastScrollScale;
+	}
+
+	public void setFastScrollScale(int scale) {
+		fastScrollScale = scale;
+	}
+
+	public int getSlowScrollScale() {
+		return slowScrollScale;
+	}
+
+	public void setSlowScrollScale(int scale) {
+		slowScrollScale = scale;
+	}
+
+	public int getSlowMouseMoveScale() {
+		return slowMouseMoveScale;
+	}
+
+	public void setSlowMouseMoveScale(int slowMouseMoveScale) {
+		this.slowMouseMoveScale = slowMouseMoveScale;
+	}
+
+	public int getMouseMoveScale() {
+		return mouseMoveScale;
+	}
+
+	public void setMouseMoveScale(int mouseMoveScale) {
+		this.mouseMoveScale = mouseMoveScale;
+	}
+
+	public int getFastMouseMoveScale() {
+		return fastMouseMoveScale;
+	}
+
+	public void setFastMouseMoveScale(int fastMouseMoveScale) {
+		this.fastMouseMoveScale = fastMouseMoveScale;
+	}
+
+	private void bindKeys() {
+		keyPressListener = new KeyPressButtonListener();
+		functionListener = new FunctionButtonListener(keyboard, this);
+		mouseEventListener = new MouseEventButtonListener();
+
+		for(Button button : bindingTypes.keySet()) {
+			bb.clearListeners(button);
+			String[] bindingType = bindingTypes.get(button);
+			for(String binding : bindingType) {
+				switch (binding) {
+					case "keyPress":
+						bb.addListener(button, keyPressListener);
+						break;
+					case "function":
+						bb.addListener(button, functionListener);
+						break;
+					case "mouseEvent":
+						bb.addListener(button, mouseEventListener);
+						break;
+				}
+			}
+		}
+
+		bb.setMode(Button.DU, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.DR, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.DD, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.DL, ButtonState.Mode.REPEAT_DELAY);
+
+		bb.setMode(Button.ADU, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.ADR, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.ADD, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.ADL, ButtonState.Mode.REPEAT_DELAY);
+
+		bb.setMode(Button.LSU, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.LSR, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.LSD, ButtonState.Mode.REPEAT_DELAY);
+		bb.setMode(Button.LSL, ButtonState.Mode.REPEAT_DELAY);
+
+		bb.setMode(Button.MRS, ButtonState.Mode.REPEAT_INSTANT);
+		bb.setPushFrequency(Button.MRS, 1);
+	}
 }

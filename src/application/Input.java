@@ -30,13 +30,6 @@ public class Input extends Application implements Runnable {
 
 	@Override
 	public void start(Stage primaryStage) {
-		/*this.primaryStage = primaryStage;
-		this.primaryStage.initStyle(StageStyle.UTILITY);
-		this.primaryStage.setMaxHeight(0);
-		this.primaryStage.setMaxWidth(0);
-		this.primaryStage.setX(Double.MAX_VALUE);
-*/
-		
 		initRootLayout();
 	}
 	
@@ -44,7 +37,7 @@ public class Input extends Application implements Runnable {
 		try {
 //			primaryStage.show();
 
-			rootLayout = (BorderPane) FXMLLoader.load(getClass().getResource("Layout.fxml"));
+			rootLayout = FXMLLoader.load(getClass().getResource("Layout.fxml"));
 			Scene scene = new Scene(rootLayout,630,150);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("flatterfx.css").toExternalForm());
@@ -57,38 +50,17 @@ public class Input extends Application implements Runnable {
 			String url = getClass().getResource("/html/index.html").toExternalForm();
 			web.getEngine().load(url);
 
-
-//			int width = 630;
-//			int height = 150;
-
-
 			window = new JFrame();
 			window.setAutoRequestFocus(false);
 			window.setAlwaysOnTop(true);
-//			window.setFocusable(false);
-//			window.setFocusableWindowState(false);
-
+			window.setFocusable(false);
+			window.setFocusableWindowState(false);
 			window.setType(JFrame.Type.UTILITY);
 			window.setUndecorated(true);
 			final JFXPanel panel = new JFXPanel();
-//			panel.setSize(630, 150);
 			panel.setScene(scene);
 			window.add(panel);
 
-
-//			window.setVisible(true);
-//			System.out.println("Window showing: " + window.isShowing());
-
-			/*this.subStage = new Stage();
-			subStage.initStyle(StageStyle.TRANSPARENT);
-			subStage.initModality(Modality.APPLICATION_MODAL);
-			subStage.setTitle("SubStage");
-			subStage.initOwner(this.primaryStage);
-			subStage.setScene(scene);
-			subStage.show();
-			hide();*/
-
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -139,26 +111,20 @@ public class Input extends Application implements Runnable {
 	}
 
 	public void hide() {
-		/*System.out.println("Hide Substage: " + subStage);
-		System.out.println("Hide Primary Stage: " + primaryStage);
-		System.out.println("Hide Platform FX Thread: " + Platform.isFxApplicationThread());*/
-//		subStage.hide();
 		window.setVisible(false);
 
 	}
 
 	public void show() {
-		/*System.out.println("Show Substage: " + subStage);
-		System.out.println("Show Primary Stage: " + primaryStage);
-		System.out.println("Show Platform FX Thread: " + Platform.isFxApplicationThread());*/
 		updateLocation();
-//		subStage.show();
 		window.setVisible(true);
 	}
 
+	public boolean isVisible() {
+		return window.isVisible();
+	}
+
 	public void updateLocation() {
-//		subStage.setX(MouseInfo.getPointerInfo().getLocation().getX());
-//		subStage.setY(MouseInfo.getPointerInfo().getLocation().getY());
 		window.setLocation((int) Math.round(MouseInfo.getPointerInfo().getLocation().getX()),
 						   (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()));
 
@@ -173,11 +139,11 @@ public class Input extends Application implements Runnable {
          public void changed(ObservableValue<? extends Document> observable, Document oldValue, Document newValue) {
              try {
 
-                 // Use reflection to retrieve the WebEngine's private 'page' field. 
-                 Field f = webengine.getClass().getDeclaredField("page"); 
-                 f.setAccessible(true); 
-                 WebPage page = (WebPage) f.get(webengine);  
-                 page.setBackgroundColor((new java.awt.Color(0, 0, 0, 0)).getRGB()); 
+                 // Use reflection to retrieve the WebEngine's private 'page' field.
+                 Field f = webengine.getClass().getDeclaredField("page");
+                 f.setAccessible(true);
+                 WebPage page = (WebPage) f.get(webengine);
+                 page.setBackgroundColor((new java.awt.Color(0, 0, 0, 0)).getRGB());
 
              } catch (Exception e) {
              }

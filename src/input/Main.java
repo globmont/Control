@@ -5,8 +5,8 @@ import application.Input;
 public class Main {
 	public static void main(String[] args) {
 		Utils.init();
-		Control c = new Control();
 		Input keyboard = new Input();
+		Control c = new Control(keyboard);
 		new Thread(keyboard).start();
 //		keyboard.run();
 //		keyboard.hide();

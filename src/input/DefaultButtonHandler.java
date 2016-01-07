@@ -155,6 +155,7 @@ public class DefaultButtonHandler implements ButtonHandler {
 	}
 	
 	public void handleButtonArray(ArrayList<Boolean> list) {
+		System.out.println("Polled old method");
 		this.buttons = list;
 		a(list.get(0));
 		b(list.get(1));
@@ -259,15 +260,12 @@ public class DefaultButtonHandler implements ButtonHandler {
 			}
 
 			Integer[] codes = Utils.keyCodes.get(Character.toLowerCase(c));
-//			System.out.println(Character.toLowerCase(c));
-//			System.out.println(Arrays.toString(codes));
 			pressKeySequence(codes);
 
 			if (Character.isUpperCase(c)) {
 				r.keyRelease(KeyEvent.VK_SHIFT);
 			}
 		}
-		r.delay(0);
 	}
 
 	public void lsDown() {
@@ -335,7 +333,7 @@ public class DefaultButtonHandler implements ButtonHandler {
 			Platform.runLater(() -> {keyboard.hide();});
 			lbPressed = false;
 		}
-		
+
 	}
 
 	
@@ -541,7 +539,7 @@ public class DefaultButtonHandler implements ButtonHandler {
 			      
 		}
 		
-		if(dpadPolls == 75) {
+		if(dpadPolls == 99) {
 			r.keyRelease(codes[0]);
 			r.keyRelease(codes[1]);                         
 			r.keyRelease(codes[2]);
