@@ -14,7 +14,7 @@ public class Control {
 	
 	long pollNumber = 0;
 	double stickDeadzoneRadius = .15;
-	private double stickCardinalDeadzone = .3;
+	private double stickCardinalDeadzone = .4;
 	double triggerDeadzone = .05;
 	int pollingTime = 8;
 	int reconnectTime = 2000;

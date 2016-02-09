@@ -7,35 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bd365d6d-5273-47f9-91bd-12054d8da741" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/joystick/MyControllerEnvironment.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/application/Input$DocListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/application/Input.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/application/Layout.fxml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/application/application.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/application/flatterfx.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/application/flatterfx.css" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/Control$Button.class" afterPath="$PROJECT_DIR$/bin/input/Control$Button.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/Control$Stick.class" afterPath="$PROJECT_DIR$/bin/input/Control$Stick.class" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/Control_jar/Control.jar" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/Control.class" afterPath="$PROJECT_DIR$/bin/input/Control.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/DefaultButtonHandler$Show.class" afterPath="$PROJECT_DIR$/bin/input/DefaultButtonHandler$Show.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/DefaultButtonHandler.class" afterPath="$PROJECT_DIR$/bin/input/DefaultButtonHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/FunctionButtonListener.class" afterPath="$PROJECT_DIR$/bin/input/FunctionButtonListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/Main$1.class" afterPath="$PROJECT_DIR$/bin/input/Main$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/input/Main.class" afterPath="$PROJECT_DIR$/bin/input/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/joystick/JInputJoystick$1.class" afterPath="$PROJECT_DIR$/bin/joystick/JInputJoystick$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/joystick/JInputJoystick.class" afterPath="$PROJECT_DIR$/bin/joystick/JInputJoystick.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Control.iml" afterPath="$PROJECT_DIR$/Control.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/html/jquery.js" afterPath="$PROJECT_DIR$/bin/html/jquery.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/jquery.js" afterPath="$PROJECT_DIR$/src/html/jquery.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/input/Control.java" afterPath="$PROJECT_DIR$/src/input/Control.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/input/DefaultButtonHandler.java" afterPath="$PROJECT_DIR$/src/input/DefaultButtonHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/input/FunctionButtonListener.java" afterPath="$PROJECT_DIR$/src/input/FunctionButtonListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/input/Main.java" afterPath="$PROJECT_DIR$/src/input/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/joystick/JInputJoystick.java" afterPath="$PROJECT_DIR$/src/joystick/JInputJoystick.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/application/Input.java" afterPath="$PROJECT_DIR$/src/keyboard/Input.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/application/Layout.fxml" afterPath="$PROJECT_DIR$/src/keyboard/Layout.fxml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/application/application.css" afterPath="$PROJECT_DIR$/src/keyboard/keyboard.css" />
     </list>
     <ignored path="Control.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Control.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Control.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/input/Control.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="177" column="45" selection-start-line="177" selection-start-column="45" selection-end-line="177" selection-end-column="45" />
+            <state vertical-scroll-proportion="0.40963855">
+              <caret line="16" column="45" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="class#Button#0;class#Control#0" expanded="false" />
@@ -86,11 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JInputJoystick.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="JInputJoystick.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/joystick/JInputJoystick.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13385826">
-              <caret line="84" column="24" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
+            <state vertical-scroll-proportion="-5.862069">
+              <caret line="89" column="32" selection-start-line="89" selection-start-column="32" selection-end-line="89" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -216,12 +191,12 @@
         <option value="$PROJECT_DIR$/src/html/index.html" />
         <option value="$PROJECT_DIR$/src/input/ConfigHandler.java" />
         <option value="$PROJECT_DIR$/src/application/Input.java" />
-        <option value="$PROJECT_DIR$/src/input/Control.java" />
         <option value="$PROJECT_DIR$/src/options/Layout.fxml" />
         <option value="$PROJECT_DIR$/src/input/Main.java" />
         <option value="$PROJECT_DIR$/src/keyboard/Input.java" />
         <option value="$PROJECT_DIR$/src/joystick/MyControllerEnvironment.java" />
         <option value="$PROJECT_DIR$/src/joystick/JInputJoystick.java" />
+        <option value="$PROJECT_DIR$/src/input/Control.java" />
       </list>
     </option>
   </component>
@@ -1002,7 +977,7 @@
       <workItem from="1454984465487" duration="3216000" />
       <workItem from="1454988261030" duration="10878000" />
       <workItem from="1455040519250" duration="68000" />
-      <workItem from="1455040813469" duration="3380000" />
+      <workItem from="1455040813469" duration="3619000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit&#10;">
       <created>1451884109094</created>
@@ -1014,7 +989,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87729000" />
+    <option name="totallyTimeSpent" value="87968000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1487,19 +1462,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/input/Control.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="177" column="45" selection-start-line="177" selection-start-column="45" selection-end-line="177" selection-end-column="45" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="class#Button#0;class#Control#0" expanded="false" />
-            <element signature="class#Stick#0;class#Control#0" expanded="false" />
-            <element signature="method#getAdjustedStickValue#0;class#Control#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/Temp/jinput-2.0.5.jar!/net/java/games/input/ControllerEnvironment.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.962963">
@@ -1520,10 +1482,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/joystick/JInputJoystick.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13385826">
-          <caret line="84" column="24" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
+        <state vertical-scroll-proportion="-5.862069">
+          <caret line="89" column="32" selection-start-line="89" selection-start-column="32" selection-end-line="89" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/input/Control.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40963855">
+          <caret line="16" column="45" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="class#Button#0;class#Control#0" expanded="false" />
+            <element signature="class#Stick#0;class#Control#0" expanded="false" />
+            <element signature="method#getAdjustedStickValue#0;class#Control#0" expanded="false" />
           </folding>
         </state>
       </provider>
