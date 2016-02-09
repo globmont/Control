@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Main {
+
+	public static TrayIcon tray;
 	public static void main(String[] args) {
 		setupTray();
 		Utils.init();
@@ -24,17 +26,17 @@ public class Main {
 	}
 
 	public static void setupTray() {
-		Image icon = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/res/controller.png"));
-		System.out.println(Main.class.getResource("/res/controller.png").getFile());
+		Image icon = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/res/controllerDisconnect.png"));
 		SystemTray sysTray = SystemTray.getSystemTray();
 		PopupMenu menu = new PopupMenu();
 		MenuItem exitItem = new MenuItem("Exit");
 
 		menu.add(exitItem);
-		TrayIcon tray = new TrayIcon(icon,"Control",menu);
+		tray = new TrayIcon(icon,"Control",menu);
 		tray.setImageAutoSize(true);
 		exitItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+//				sysTray.remove(tray);
 				System.exit(0);
 			}
 		});

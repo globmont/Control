@@ -17,6 +17,7 @@ public class Control {
 	private double stickCardinalDeadzone = .3;
 	double triggerDeadzone = .05;
 	int pollingTime = 8;
+	int reconnectTime = 2000;
 
 
 	private boolean dpadToggle = false;
@@ -100,26 +101,32 @@ public class Control {
 			e1.printStackTrace();
 		}
 
-		try {
-			controller = new JInputJoystick(Controller.Type.GAMEPAD);
-			if (controller.isControllerConnected()) {
-				System.out.println("Controller connected successfully!");
-			} else {
-				System.out.println("Please connect controller!");
-				while(!controller.isControllerConnected()) {
-					controller = new JInputJoystick(Controller.Type.GAMEPAD);
-				}
-				System.out.println("Controller connected successfully!");
-			}
-		} catch(Exception e){
-			System.out.println("Please connect controller!");
-			while(!controller.isControllerConnected()) {
-				controller = new JInputJoystick(Controller.Type.GAMEPAD);
-			}
-			System.out.println("Controller connected successfully!");
-		}
+		waitOnReconnect();
 	}
-	
+
+	public void waitOnReconnect() {
+		System.out.println("Please connect controller!");
+		Main.tray.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/res/controllerDisconnect.png")));
+
+
+		if(controller == null || !controller.isControllerConnected() || !controller.pollController()) {
+			controller = new JInputJoystick(Controller.Type.GAMEPAD);
+		}
+
+		while(controller == null || !controller.isControllerConnected() || !controller.pollController()) {
+			controller = new JInputJoystick(Controller.Type.GAMEPAD);
+			try {
+				Thread.sleep(reconnectTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		Main.tray.displayMessage("Control", "Controller connected", TrayIcon.MessageType.INFO);
+		Main.tray.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/res/controller.png")));
+		System.out.println("Controller connected successfully!");
+	}
+
 	public void start() {
 		run();
 	}
@@ -127,9 +134,9 @@ public class Control {
 	private void run() {
 
 		while(true) {
-			while(!controller.pollController()) {
-				System.err.println("Couldn't reach controller! Waiting for reconnect.");
-
+			if(!controller.pollController()) {
+				Main.tray.displayMessage("Control", "Controller disconnected", TrayIcon.MessageType.INFO);
+				waitOnReconnect();
 			}
 			
 			pollNumber++;

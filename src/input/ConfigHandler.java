@@ -151,7 +151,7 @@ public class ConfigHandler {
         for(String buttonName : buttonMode.keySet()) {
             Control.Button button = mapToButton.get(buttonName);
             control.setButtonMode(button, mapToButtonMode.get(buttonMode.get(buttonName)));
-            System.out.println("Set button " + buttonName + " to mode " + buttonMode.get(buttonName) + "(" + mapToButtonMode.get(buttonMode.get(buttonName)) + ")");
+//            System.out.println("Set button " + buttonName + " to mode " + buttonMode.get(buttonName) + "(" + mapToButtonMode.get(buttonMode.get(buttonName)) + ")");
         }
     }
 

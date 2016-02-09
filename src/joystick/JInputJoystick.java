@@ -6,6 +6,7 @@ import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.DirectAndRawInputEnvironmentPlugin;
 
 /**
  *
@@ -79,8 +80,9 @@ public class JInputJoystick {
      */
     private void initController(Controller.Type controllerType_1, Controller.Type controllerType_2)
     {
-        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
-        
+        Controller[] controllers = new DirectAndRawInputEnvironmentPlugin().getControllers();
+//        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+
         for(int i=0; i < controllers.length && controller == null; i++) {
             if(
                controllers[i].getType() == controllerType_1 ||
