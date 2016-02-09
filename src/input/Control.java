@@ -1,6 +1,6 @@
 package input;
 
-import application.Input;
+import keyboard.Input;
 import joystick.JInputJoystick;
 import net.java.games.input.Controller;
 
@@ -19,6 +19,9 @@ public class Control {
 	int pollingTime = 8;
 	int reconnectTime = 2000;
 
+	private ArrayList<Control.Button> buttonList = new ArrayList<>();
+	private ArrayList<Control.Button> pressedButtons;
+	private ArrayList<Boolean> buttonValues;
 
 	private boolean dpadToggle = false;
 	private boolean keyboardVisible = false;
@@ -109,12 +112,12 @@ public class Control {
 		Main.tray.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/res/controllerDisconnect.png")));
 
 
-		if(controller == null || !controller.isControllerConnected() || !controller.pollController()) {
+		if(controller == null) {
 			controller = new JInputJoystick(Controller.Type.GAMEPAD);
 		}
 
-		while(controller == null || !controller.isControllerConnected() || !controller.pollController()) {
-			controller = new JInputJoystick(Controller.Type.GAMEPAD);
+		while(!controller.isControllerConnected() || !controller.pollController()) {
+			controller.refreshControllers(Controller.Type.GAMEPAD);
 			try {
 				Thread.sleep(reconnectTime);
 			} catch (InterruptedException e) {
@@ -141,7 +144,7 @@ public class Control {
 			
 			pollNumber++;
 
-			ArrayList<Control.Button> pressedButtons = getPressedButtons();
+			pressedButtons = getPressedButtons();
 			bb.pollButtons(pressedButtons);
 			
 			
@@ -171,72 +174,72 @@ public class Control {
 		return Double.NaN;
 	}
 
-	private ArrayList<Control.Button> getPressedButtons() {
-		ArrayList<Boolean> buttonValues = controller.getButtonsValues();
-		ArrayList<Control.Button> list = new ArrayList<>();
+	private ArrayList<Button> getPressedButtons() {
+		buttonValues = controller.getButtonsValues();
+		buttonList.clear();
 		if(buttonValues.get(0)) {
-			list.add(Button.A);
+			buttonList.add(Button.A);
 		}
 		if(buttonValues.get(1)) {
-			list.add(Button.B);
+			buttonList.add(Button.B);
 		}
 		if(buttonValues.get(2)) {
-			list.add(Button.X);
+			buttonList.add(Button.X);
 		}
 		if(buttonValues.get(3)) {
-			list.add(Button.Y);
+			buttonList.add(Button.Y);
 		}
 		if(buttonValues.get(4)) {
-			list.add(Button.LB);
+			buttonList.add(Button.LB);
 		}
 		if(buttonValues.get(5)) {
-			list.add(Button.RB);
+			buttonList.add(Button.RB);
 		}
 		if(buttonValues.get(6)) {
-			list.add(Button.BACK);
+			buttonList.add(Button.BACK);
 		}
 		if(buttonValues.get(7)) {
-			list.add(Button.START);
+			buttonList.add(Button.START);
 		}
 		if(buttonValues.get(8)) {
-			list.add(Button.LS);
+			buttonList.add(Button.LS);
 		}
 		if(buttonValues.get(9)) {
-			list.add(Button.RS);
+			buttonList.add(Button.RS);
 		}
 
 		double hatPosition = controller.getHatSwitchPosition();
 		if(hatPosition == .25) {
 			if(!dpadToggle) {
-				list.add(Button.DU);
+				buttonList.add(Button.DU);
 			} else {
-				list.add(Button.ADU);
+				buttonList.add(Button.ADU);
 			}
 		} else if(hatPosition == .5) {
 			if(!dpadToggle) {
-				list.add(Button.DR);
+				buttonList.add(Button.DR);
 			} else {
-				list.add(Button.ADR);
+				buttonList.add(Button.ADR);
 			}
 		} else if(hatPosition == .75) {
 			if(!dpadToggle) {
-				list.add(Button.DD);
+				buttonList.add(Button.DD);
 			} else {
-				list.add(Button.ADD);
+				buttonList.add(Button.ADD);
 			}
 		} else if(hatPosition == 1) {
 			if(!dpadToggle) {
-				list.add(Button.DL);
+				buttonList.add(Button.DL);
 			} else {
-				list.add(Button.ADL);
+				buttonList.add(Button.ADL);
 			}
 		}
 
 		if(!Utils.isWithin(0, controller.getZAxisValue(), triggerDeadzone)) {
 			if(controller.getZAxisValue() < 0) {
-				list.add(Button.RT);
+				buttonList.add(Button.RT);
 			} else {
-				list.add(Button.LT);
+				buttonList.add(Button.LT);
 			}
 		}
 
@@ -247,34 +250,34 @@ public class Control {
 
 
 		if(!Utils.isWithin(0, rsX, stickDeadzoneRadius) || !Utils.isWithin(0, rsY, stickDeadzoneRadius)) {
-			list.add(Button.MRS);
+			buttonList.add(Button.MRS);
 		}
 
 		if(!Utils.isWithin(0, lsX, stickDeadzoneRadius) || !Utils.isWithin(0, lsY, stickDeadzoneRadius)) {
-			list.add(Button.MLS);
+			buttonList.add(Button.MLS);
 		}
 
 		if(rsX >= stickCardinalDeadzone && Utils.isWithin(0, rsY, stickCardinalDeadzone)) {
-			list.add(Button.RSR);
+			buttonList.add(Button.RSR);
 		} else if(rsX <= -stickCardinalDeadzone && Utils.isWithin(0, rsY, stickCardinalDeadzone)) {
-			list.add(Button.RSL);
+			buttonList.add(Button.RSL);
 		} else if(rsY >= stickCardinalDeadzone && Utils.isWithin(0, rsX, stickCardinalDeadzone)) {
-			list.add(Button.RSD);
+			buttonList.add(Button.RSD);
 		} else if(rsY <= -stickCardinalDeadzone && Utils.isWithin(0, rsX, stickCardinalDeadzone)) {
-			list.add(Button.RSU);
+			buttonList.add(Button.RSU);
 		}
 
 		if(lsX >= stickCardinalDeadzone && Utils.isWithin(0, lsY, stickCardinalDeadzone)) {
-			list.add(Button.LSR);
+			buttonList.add(Button.LSR);
 		} else if(lsX <= -stickCardinalDeadzone && Utils.isWithin(0, lsY, stickCardinalDeadzone)) {
-			list.add(Button.LSL);
+			buttonList.add(Button.LSL);
 		} else if(lsY >= stickCardinalDeadzone && Utils.isWithin(0, lsX, stickCardinalDeadzone)) {
-			list.add(Button.LSD);
+			buttonList.add(Button.LSD);
 		} else if(lsY <= -stickCardinalDeadzone && Utils.isWithin(0, lsX, stickCardinalDeadzone)) {
-			list.add(Button.LSU);
+			buttonList.add(Button.LSU);
 		}
 
-		return list;
+		return buttonList;
 	}
 
 	public boolean getDpadToggle() {

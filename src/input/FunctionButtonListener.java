@@ -1,6 +1,6 @@
 package input;
 
-import application.Input;
+import keyboard.Input;
 import javafx.application.Platform;
 
 import java.awt.*;

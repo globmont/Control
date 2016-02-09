@@ -41,7 +41,7 @@ public class JInputJoystick {
         
     // Controller buttons states
     private ArrayList<Boolean> buttonsValues;
-
+    private MyControllerEnvironment myControllerEnvironment;
     
     
     
@@ -71,24 +71,28 @@ public class JInputJoystick {
     
     private void initialize()
     {
+        this.myControllerEnvironment = new MyControllerEnvironment();
         this.controller = null;
         this.buttonsValues = new ArrayList<Boolean>();
     }
     
     /**
      * Save first founded controller of given type.
-     * 
-     * @param controllerType Desired controller type.
+     *
      */
     private void initController(Controller.Type controllerType_1, Controller.Type controllerType_2)
     {
 //        Controller[] controllers = new DirectAndRawInputEnvironmentPlugin().getControllers();
-        Controller[] controllers = new Controller[0];
+      /*  Controller[] controllers = null;
         try {
             controllers = createDefaultEnvironment().getControllers();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
-        }
+        }*/
+//        myControllerEnvironment.scanControllers();
+        myControllerEnvironment = new MyControllerEnvironment();
+        Controller[] controllers = myControllerEnvironment.getControllers();
+        //System.out.println(Arrays.toString(controllers));
 
         for(int i=0; i < controllers.length && controller == null; i++) {
             if(
@@ -102,11 +106,16 @@ public class JInputJoystick {
         }
     }
 
+    public void refreshControllers(Controller.Type cont1) {
+        initController(cont1, null);
+    }
+
+
     private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {
 
         // Find constructor (class is package private, so we can't access it directly)
         Constructor<ControllerEnvironment> constructor = (Constructor<ControllerEnvironment>)
-                Class.forName("net.java.games.input.DefaultControllerEnvironment").getDeclaredConstructors()[0];
+                Class.forName("net.java.games.input.MyControllerEnvironment").getDeclaredConstructors()[0];
 
         // Constructor is package private, so we have to deactivate access control checks
         constructor.setAccessible(true);

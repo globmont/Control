@@ -1,6 +1,6 @@
 package input;
 
-import application.Input;
+import keyboard.Input;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,8 +31,16 @@ public class Main {
 		PopupMenu menu = new PopupMenu();
 		MenuItem exitItem = new MenuItem("Exit");
 
+
+
 		menu.add(exitItem);
+/*
+		int trayIconWidth = sysTray.getTrayIconSize().width;
+		int trayIconHeight = sysTray.getTrayIconSize().height;
+		System.out.println(trayIconWidth + "\t" + trayIconHeight);
+		icon = icon.getScaledInstance(trayIconWidth, trayIconHeight, Image.SCALE_SMOOTH);*/
 		tray = new TrayIcon(icon,"Control",menu);
+
 		tray.setImageAutoSize(true);
 		exitItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

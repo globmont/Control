@@ -1,4 +1,4 @@
-package application;
+package keyboard;
 
 import com.sun.webkit.WebPage;
 import javafx.application.Application;
@@ -40,7 +40,7 @@ public class Input extends Application implements Runnable {
 
 			rootLayout = FXMLLoader.load(getClass().getResource("Layout.fxml"));
 			Scene scene = new Scene(rootLayout,630,150);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("keyboard.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("flatterfx.css").toExternalForm());
 			
 			WebView web = (WebView) scene.lookup("#main");
