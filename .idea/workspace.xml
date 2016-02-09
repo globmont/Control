@@ -6,12 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd365d6d-5273-47f9-91bd-12054d8da741" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/input/ConfigHandler.java" afterPath="$PROJECT_DIR$/src/input/ConfigHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/input/Control.java" afterPath="$PROJECT_DIR$/src/input/Control.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/input/Main.java" afterPath="$PROJECT_DIR$/src/input/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/joystick/JInputJoystick.java" afterPath="$PROJECT_DIR$/src/joystick/JInputJoystick.java" />
-    </list>
+    <list default="true" id="bd365d6d-5273-47f9-91bd-12054d8da741" name="Default" comment="" />
     <ignored path="Control.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -61,7 +56,7 @@
       <file leaf-file-name="Control.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/input/Control.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43524095">
+            <state vertical-scroll-proportion="0.3148148">
               <caret line="137" column="104" selection-start-line="137" selection-start-column="104" selection-end-line="137" selection-end-column="104" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -959,7 +954,7 @@
       <workItem from="1451881828803" duration="4047000" />
       <workItem from="1451885989989" duration="65397000" />
       <workItem from="1454984465487" duration="3216000" />
-      <workItem from="1454988261030" duration="4315000" />
+      <workItem from="1454988261030" duration="4547000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit&#10;">
       <created>1451884109094</created>
@@ -971,7 +966,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77718000" />
+    <option name="totallyTimeSpent" value="77950000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -993,7 +988,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26849896" sideWeight="0.50208336" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30972517" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26849896" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26849896" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1796875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1515,7 +1510,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/input/Control.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43524095">
+        <state vertical-scroll-proportion="0.3148148">
           <caret line="137" column="104" selection-start-line="137" selection-start-column="104" selection-end-line="137" selection-end-column="104" />
           <folding>
             <element signature="imports" expanded="true" />
