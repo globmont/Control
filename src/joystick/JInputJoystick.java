@@ -1,12 +1,14 @@
 package joystick;
 
-import java.util.ArrayList;
-
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.DirectAndRawInputEnvironmentPlugin;
+
+import java.lang.reflect.Constructor;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,7 +41,7 @@ public class JInputJoystick {
         
     // Controller buttons states
     private ArrayList<Boolean> buttonsValues;
-    
+
     
     
     
@@ -80,8 +82,13 @@ public class JInputJoystick {
      */
     private void initController(Controller.Type controllerType_1, Controller.Type controllerType_2)
     {
-        Controller[] controllers = new DirectAndRawInputEnvironmentPlugin().getControllers();
-//        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+//        Controller[] controllers = new DirectAndRawInputEnvironmentPlugin().getControllers();
+        Controller[] controllers = new Controller[0];
+        try {
+            controllers = createDefaultEnvironment().getControllers();
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
 
         for(int i=0; i < controllers.length && controller == null; i++) {
             if(
@@ -93,6 +100,42 @@ public class JInputJoystick {
                 break;
             }
         }
+    }
+
+    private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {
+
+        // Find constructor (class is package private, so we can't access it directly)
+        Constructor<ControllerEnvironment> constructor = (Constructor<ControllerEnvironment>)
+                Class.forName("net.java.games.input.DefaultControllerEnvironment").getDeclaredConstructors()[0];
+
+        // Constructor is package private, so we have to deactivate access control checks
+        constructor.setAccessible(true);
+
+        // Create object with default constructor
+        return constructor.newInstance();
+    }
+
+    /**
+     * Fix windows 8 warnings by defining a working plugin
+     */
+    static {
+
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+            public Object run() {
+                String os = System.getProperty("os.name", "").trim();
+                if (os.startsWith("Windows 8") || os.startsWith("Windows 10")) {  // 8, 8.1 etc.
+
+                    // disable default plugin lookup
+                    System.setProperty("jinput.useDefaultPlugin", "false");
+
+                    // set to same as windows 7 (tested for windows 8 and 8.1)
+                    System.setProperty("net.java.games.input.plugins", "net.java.games.input.DirectAndRawInputEnvironmentPlugin");
+
+                }
+                return null;
+            }
+        });
+
     }
     
     

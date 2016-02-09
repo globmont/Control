@@ -80,8 +80,11 @@ public class Input extends Application implements Runnable {
 	}
 
 	public void movePageLeft() {
-		int index = getIndex();
-		setIndex(index - 9);
+//		int index = getIndex();
+//		setIndex(index - 9);
+		for(int i = 0; i < 5; i++) {
+			moveLeft();
+		}
 	}
 
 	public void moveRight() {
@@ -89,8 +92,11 @@ public class Input extends Application implements Runnable {
 	}
 
 	public void movePageRight() {
-		int index = getIndex();
-		setIndex(index + 9);
+//		int index = getIndex();
+//		setIndex(index + 9);
+		for(int i = 0; i < 5; i++) {
+			moveRight();
+		}
 	}
 
 	public String getLetter() {
