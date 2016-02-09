@@ -127,9 +127,9 @@ public class Control {
 	private void run() {
 
 		while(true) {
-			if(!controller.pollController()) {
-				System.err.println("Couldn't reach controller! Exiting.");
-				break;
+			while(!controller.pollController()) {
+				System.err.println("Couldn't reach controller! Waiting for reconnect.");
+
 			}
 			
 			pollNumber++;

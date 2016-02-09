@@ -94,4 +94,4 @@ function getDimensions() {
 	return {height: height, width: width};
 }
 
-init();
+//init();

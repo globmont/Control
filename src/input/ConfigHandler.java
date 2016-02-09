@@ -2,7 +2,6 @@ package input;
 
 import org.ini4j.Wini;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class ConfigHandler {
         this.filePath = filePath;
 
         try {
-            ini = new Wini(new File(filePath));
+            ini = new Wini(getClass().getResource("/config.ini"));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Could not find config file. Reverting to default configuration.");
@@ -148,7 +147,7 @@ public class ConfigHandler {
             control.setButtonPushFrequency(button, Integer.parseInt(pushFrequency.get(buttonName)));
         }
 
-        System.out.println(buttonMode.size());
+//        System.out.println(buttonMode.size());
         for(String buttonName : buttonMode.keySet()) {
             Control.Button button = mapToButton.get(buttonName);
             control.setButtonMode(button, mapToButtonMode.get(buttonMode.get(buttonName)));

@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.Scanner;
 
 
 public class Input extends Application implements Runnable {
@@ -47,8 +48,15 @@ public class Input extends Application implements Runnable {
 			this.webengine = web.getEngine();
             webengine.documentProperty().addListener(new DocListener());
 
+			String jquery = new Scanner(getClass().getResourceAsStream("/html/jquery.js")).useDelimiter(("\\A")).next();
+			String script = new Scanner(getClass().getResourceAsStream("/html/script.js")).useDelimiter(("\\A")).next();
+
+
 			String url = getClass().getResource("/html/index.html").toExternalForm();
-			web.getEngine().load(url);
+//			System.out.println(url);
+//			webengine.executeScript(jquery);
+//			webengine.executeScript(script);
+			webengine.load(url);
 
 			window = new JFrame();
 			window.setAutoRequestFocus(false);
