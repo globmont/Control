@@ -118,6 +118,7 @@ public class Control {
 
 		while(!controller.isControllerConnected() || !controller.pollController()) {
 			controller.refreshControllers(Controller.Type.GAMEPAD);
+//			System.gc();
 			try {
 				Thread.sleep(reconnectTime);
 			} catch (InterruptedException e) {
@@ -147,7 +148,7 @@ public class Control {
 			pressedButtons = getPressedButtons();
 			bb.pollButtons(pressedButtons);
 			
-			
+//			System.gc();
 			try {
 				Thread.sleep(pollingTime);
 			} catch (InterruptedException e) {

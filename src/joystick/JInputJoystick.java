@@ -83,15 +83,16 @@ public class JInputJoystick {
     private void initController(Controller.Type controllerType_1, Controller.Type controllerType_2)
     {
 //        Controller[] controllers = new DirectAndRawInputEnvironmentPlugin().getControllers();
-      /*  Controller[] controllers = null;
+        Controller[] controllers = null;
         try {
             controllers = createDefaultEnvironment().getControllers();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
-        }*/
+        }
+        System.gc();
 //        myControllerEnvironment.scanControllers();
-        myControllerEnvironment = new MyControllerEnvironment();
-        Controller[] controllers = myControllerEnvironment.getControllers();
+//        myControllerEnvironment = new MyControllerEnvironment();
+//        Controller[] controllers = myControllerEnvironment.getControllers();
         //System.out.println(Arrays.toString(controllers));
 
         for(int i=0; i < controllers.length && controller == null; i++) {
@@ -115,7 +116,7 @@ public class JInputJoystick {
 
         // Find constructor (class is package private, so we can't access it directly)
         Constructor<ControllerEnvironment> constructor = (Constructor<ControllerEnvironment>)
-                Class.forName("net.java.games.input.MyControllerEnvironment").getDeclaredConstructors()[0];
+                Class.forName("net.java.games.input.DefaultControllerEnvironment").getDeclaredConstructors()[0];
 
         // Constructor is package private, so we have to deactivate access control checks
         constructor.setAccessible(true);
